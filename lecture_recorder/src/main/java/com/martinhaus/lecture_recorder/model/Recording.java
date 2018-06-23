@@ -1,5 +1,8 @@
 package com.martinhaus.lecture_recorder.model;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,16 +16,19 @@ public class Recording {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String title;
+    @CreationTimestamp
     private Date datetimeCreated;
     private Date datetimeScheduled;
     private Date startTime;
     private Date endTime;
+    @ColumnDefault("false")
     private boolean error;
+    @ColumnDefault("false")
     private boolean finished;
 
     @ManyToOne
     @JoinColumn(name="room_id", nullable=false)
-    Room room;
+    private Room room;
 
     public Recording() {
     }
@@ -92,5 +98,21 @@ public class Recording {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }
