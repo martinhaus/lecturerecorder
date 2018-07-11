@@ -1,17 +1,23 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <recordings />
+    <ScheduleRecording />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Recordings from './components/Recordings.vue'
+import ScheduleRecording from './components/ScheduleRecording.vue'
+
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css'
+Vue.component('datetime', Datetime);
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Recordings,
+    ScheduleRecording
   }
 }
 </script>
