@@ -9,10 +9,6 @@
 import Recordings from './components/Recordings.vue'
 import ScheduleRecording from './components/ScheduleRecording.vue'
 
-import { Datetime } from 'vue-datetime';
-import 'vue-datetime/dist/vue-datetime.css'
-Vue.component('datetime', Datetime);
-
 export default {
   name: 'app',
   components: {
