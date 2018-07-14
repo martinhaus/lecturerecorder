@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <recordings />
+    <RecordingsList />
     <ScheduleRecording />
   </div>
 </template>
 
 <script>
-import Recordings from './components/Recordings.vue'
+import RecordingsList from './components/RecordingsList.vue'
 import ScheduleRecording from './components/ScheduleRecording.vue'
 
 export default {
   name: 'app',
   components: {
-    Recordings,
+    RecordingsList,
     ScheduleRecording
   }
 }
