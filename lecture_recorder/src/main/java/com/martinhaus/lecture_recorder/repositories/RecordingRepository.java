@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RecordingRepository extends CrudRepository<Recording, Long> {
     List<Recording> findAll();
+    Recording findById(long id);
 }

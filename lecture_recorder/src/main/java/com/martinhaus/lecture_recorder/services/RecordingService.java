@@ -29,4 +29,12 @@ public class RecordingService {
     public List<Recording> getAllRecordings() {
         return recordingRepository.findAll();
     }
+
+    /**
+     * Get details of one recording
+     * @return
+     */
+    public Recording getRecording(long id) {
+        return recordingRepository.findById(id);
+    }
 }
