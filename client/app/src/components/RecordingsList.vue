@@ -11,13 +11,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="clickable-row" v-for="recording in recordings" :key="recording.id">
+        <router-link tag="tr" :to="{path: '/recording/' + recording.id}" class="clickable-row" v-for="recording in recordings" :key="recording.id">
           <td>{{ recording.id }}</td>
           <td>{{ recording.title }}</td>
           <td>{{ recording.room.name }}</td>
           <td>{{ recording.startTime }}</td>
           <td>{{ recording.endTime }}</td>
-        </tr>
+        </router-link>
       </tbody>
     </table>
   </div>
