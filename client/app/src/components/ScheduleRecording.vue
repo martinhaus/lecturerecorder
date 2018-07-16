@@ -14,7 +14,7 @@
           </div>
           <div class="col-2">
             <select id="room">
-              <option>aaa</option>
+              <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
             </select>
           </div>
         </div>
@@ -60,6 +60,7 @@
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
 import moment from 'moment';
+import axios from 'axios';
 
 export default {    
   data () {
@@ -67,10 +68,14 @@ export default {
        startDatetime: null,
        endDatetime: null,
        duration: 0,
+       rooms: null
     }
   },
   components: {
     datetime: Datetime
+  },
+  created: function () {
+    this.getRooms();
   },
   methods: {
     scheduleRecording() {
@@ -81,6 +86,12 @@ export default {
         this.duration = moment(this.endDatetime).diff(this.startDatetime);
         this.duration = moment.duration(this.duration).asMinutes();
       }      
+    },
+    getRooms: function () {
+      axios.get('http://localhost:8080/rooms')
+      .then((response) => {
+        this.rooms = response.data;
+      })
     }
   }
 }
