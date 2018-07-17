@@ -7,14 +7,23 @@
     <div class="container">
       <form @submit.prevent="scheduleRecording">
 
+        <div class="row justify-content-center">
+          <div class="col-2">
+            <label for="title">Title</label>
+          </div>
+          <div class="col-2">
+            <input type="text" id="title" v-model="title" />
+          </div>
+        </div>
+
         <!-- available rooms for recordings -->
         <div class="row justify-content-center">
           <div class="col-2">
             <label for="room">Room</label>
           </div>
           <div class="col-2">
-            <select id="room">
-              <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
+            <select v-model='selectedRoom' id="room">
+              <option v-for="(room, index) in rooms" :key="room.id" :value="index">{{ room.name }}</option>
             </select>
           </div>
         </div>
@@ -48,6 +57,8 @@
             <span id="duration">{{ duration }} minutes</span>
           </div>
         </div>
+
+        <button class="btn btn-primary">Schedule</button>
        </form>
     </div>
    
@@ -62,13 +73,16 @@ import 'vue-datetime/dist/vue-datetime.css';
 import moment from 'moment';
 import axios from 'axios';
 
+
 export default {    
   data () {
     return {
+      title: '',
        startDatetime: null,
        endDatetime: null,
        duration: 0,
-       rooms: null
+       rooms: null,
+       selectedRoom: 0
     }
   },
   components: {
@@ -79,7 +93,12 @@ export default {
   },
   methods: {
     scheduleRecording() {
-      alert('Scheduled')
+      axios.post('http://localhost:8080/recording/schedule', {
+        title: this.title,
+        startTime: this.startDatetime,
+        endTime: this.endDatetime,
+        room: this.rooms[this.selectedRoom]
+      })
     },
     calculateDuration: function() {
       if (this.endDatetime != '' && this.startDatetime != '') {
