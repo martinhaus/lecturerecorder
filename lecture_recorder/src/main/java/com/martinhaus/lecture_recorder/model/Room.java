@@ -28,7 +28,6 @@ public class Room {
     }
 
 
-
     public Room(String name, String ipAdress, String audioSource, List<Recording> recordings) {
         this.name = name;
         this.ipAdress = ipAdress;

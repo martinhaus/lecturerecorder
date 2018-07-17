@@ -29,6 +29,8 @@ public class Recording {
     private boolean error;
     @ColumnDefault("false")
     private boolean finished;
+    @ColumnDefault("false")
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name="room_id", nullable=false)
@@ -53,6 +55,17 @@ public class Recording {
         this.endTime = endTime;
         this.error = error;
         this.finished = finished;
+        this.room = room;
+    }
+
+    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, Room room) {
+        this.title = title;
+        this.datetimeCreated = datetimeCreated;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.error = error;
+        this.finished = finished;
+        this.active = active;
         this.room = room;
     }
 
@@ -118,5 +131,13 @@ public class Recording {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
