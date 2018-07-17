@@ -27,6 +27,15 @@ public class Room {
         this.audioSource = audioSource;
     }
 
+
+
+    public Room(String name, String ipAdress, String audioSource, List<Recording> recordings) {
+        this.name = name;
+        this.ipAdress = ipAdress;
+        this.audioSource = audioSource;
+        this.recordings = recordings;
+    }
+
     public Long getId() {
         return id;
     }

@@ -4,6 +4,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -15,12 +17,14 @@ public class Recording {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    @NotNull
     private String title;
     @CreationTimestamp
     private Date datetimeCreated;
-    private Date datetimeScheduled;
-    private Date startTime;
-    private Date endTime;
+    @NotNull
+    private LocalDateTime startTime;
+    @NotNull
+    private LocalDateTime endTime;
     @ColumnDefault("false")
     private boolean error;
     @ColumnDefault("false")
@@ -33,10 +37,18 @@ public class Recording {
     public Recording() {
     }
 
-    public Recording(String title, Date datetimeCreated, Date datetimeScheduled, Date startTime, Date endTime, boolean error, boolean finished, Room room) {
+    public Recording(String title, Date datetimeCreated, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
         this.title = title;
         this.datetimeCreated = datetimeCreated;
-        this.datetimeScheduled = datetimeScheduled;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.error = error;
+        this.finished = finished;
+        this.room = room;
+    }
+
+    public Recording(String title, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
+        this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.error = error;
@@ -60,27 +72,19 @@ public class Recording {
         this.datetimeCreated = datetimeCreated;
     }
 
-    public Date getDatetimeScheduled() {
-        return datetimeScheduled;
-    }
-
-    public void setDatetimeScheduled(Date datetimeScheduled) {
-        this.datetimeScheduled = datetimeScheduled;
-    }
-
-    public Date getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

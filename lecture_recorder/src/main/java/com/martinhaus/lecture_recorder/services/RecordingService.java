@@ -18,10 +18,6 @@ public class RecordingService {
         this.recordingRepository = recordingRepository;
     }
 
-    public void scheduleRecording() {
-
-    }
-
     /**
      * Get all recordings
      * @return
@@ -36,5 +32,9 @@ public class RecordingService {
      */
     public Recording getRecording(long id) {
         return recordingRepository.findById(id);
+    }
+
+    public void scheduleRecording(Recording recording) {
+        recordingRepository.save(recording);
     }
 }
