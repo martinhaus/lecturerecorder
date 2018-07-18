@@ -73,6 +73,7 @@ import 'vue-datetime/dist/vue-datetime.css';
 import moment from 'moment';
 import axios from 'axios';
 
+const API_URL = process.env.VUE_APP_ROOT_API
 
 export default {    
   data () {
@@ -93,7 +94,7 @@ export default {
   },
   methods: {
     scheduleRecording() {
-      axios.post('http://localhost:8080/recording/schedule', {
+      axios.post(API_URL + 'recording/schedule', {
         title: this.title,
         startTime: this.startDatetime,
         endTime: this.endDatetime,
@@ -107,7 +108,7 @@ export default {
       }      
     },
     getRooms: function () {
-      axios.get('http://localhost:8080/rooms')
+      axios.get(API_URL + 'rooms')
       .then((response) => {
         this.rooms = response.data;
       })

@@ -24,6 +24,9 @@
 <script>
 import axios from 'axios';
 
+const API_URL = process.env.VUE_APP_ROOT_API
+
+
 export default {
   name: 'RecordingDetails',
   data() {
@@ -37,7 +40,7 @@ export default {
   },
   methods: {
       getRecordingDetails: function () {
-          axios.get('http://localhost:8080/recording/' + this.id)
+          axios.get(API_URL + 'recording/' + this.id)
           .then((response) => {
               this.recording = response.data;
           })
