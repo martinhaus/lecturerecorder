@@ -32,6 +32,8 @@ public class Recording {
     @ColumnDefault("false")
     private boolean active;
 
+    private long pid;
+
     @ManyToOne
     @JoinColumn(name="room_id", nullable=false)
     private Room room;
@@ -58,7 +60,7 @@ public class Recording {
         this.room = room;
     }
 
-    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, Room room) {
+    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, long pid, Room room) {
         this.title = title;
         this.datetimeCreated = datetimeCreated;
         this.startTime = startTime;
@@ -66,6 +68,7 @@ public class Recording {
         this.error = error;
         this.finished = finished;
         this.active = active;
+        this.pid = pid;
         this.room = room;
     }
 
@@ -139,5 +142,13 @@ public class Recording {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public long getPid() {
+        return pid;
+    }
+
+    public void setPid(long pid) {
+        this.pid = pid;
     }
 }

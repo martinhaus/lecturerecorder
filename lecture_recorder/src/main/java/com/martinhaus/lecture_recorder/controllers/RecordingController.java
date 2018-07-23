@@ -26,7 +26,7 @@ public class RecordingController {
 
     @RequestMapping(value = "/recording/schedule", method = POST)
     public ResponseEntity scheduleRecording(@RequestBody Recording recording) {
-        recordingService.scheduleRecording(recording);
+        recordingService.saveRecording(recording);
         return new ResponseEntity(HttpStatus.OK);
     }
 
