@@ -1,4 +1,4 @@
-package com.martinhaus.lecture_recorder.common;
+package com.martinhaus.lecture_recorder.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
