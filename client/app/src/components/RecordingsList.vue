@@ -41,8 +41,6 @@ export default {
   },
   methods: {
     getRecordings: function () {
-      console.log(process.env)
-      // axios.get("http://localhost:8080/recordings")
       axios.get(API_URL + "recordings")
       .then((response) => {
         this.recordings = response.data;

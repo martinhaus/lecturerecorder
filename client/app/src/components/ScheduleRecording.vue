@@ -34,7 +34,7 @@
             <label for="startDatetime">Scheduled start</label>
           </div>
           <div class="col-2">
-            <datetime id="startDatetime" type="datetime" v-on:input="calculateDuration" format="yyyy-MM-dd HH:mm" v-model="startDatetime"></datetime>
+            <datetime id="startDatetime" type="datetime" v-on:input="calculateDuration" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="startDatetime"></datetime>
           </div>
         </div>
 
@@ -44,7 +44,7 @@
             <label for="endDatetime">Scheduled end</label>
           </div>
           <div class="col-2">
-            <datetime id="endDatetime" type="datetime" v-on:input="calculateDuration" format="yyyy-MM-dd HH:mm" v-model="endDatetime"></datetime>
+            <datetime id="endDatetime" type="datetime" v-on:input="calculateDuration" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="endDatetime"></datetime>
           </div>
         </div>
 
@@ -83,17 +83,19 @@ export default {
        endDatetime: null,
        duration: 0,
        rooms: null,
-       selectedRoom: 0
+       selectedRoom: 0,  
     }
   },
   components: {
-    datetime: Datetime
+    datetime: Datetime,
   },
   created: function () {
     this.getRooms();
   },
   methods: {
     scheduleRecording() {
+      this.startDatetime = moment(this.startDatetime).format('YYYY-MM-DDTHH:mm:ss')
+      this.endDatetime = moment(this.endDatetime).format('YYYY-MM-DDTHH:mm:ss')
       axios.post(API_URL + 'recording/schedule', {
         title: this.title,
         startTime: this.startDatetime,
