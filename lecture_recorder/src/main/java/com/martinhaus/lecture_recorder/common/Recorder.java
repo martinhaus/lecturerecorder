@@ -37,7 +37,7 @@ public class Recorder {
         //Load params for recording script
         String cameraIpAdress = recording.getRoom().getIpAdress();
         String audioSource = recording.getRoom().getAudioSource();
-        String outputFileName = String.format("%s-%s_%s",recording.getStartTime(), recording.getEndTime(), recording.getTitle());
+        String outputFileName = String.format("%s_%s_%s",recording.getStartTime(), recording.getEndTime(), recording.getTitle());
 
         // Load recording script
         recordingScriptPath = new ClassPathResource(recordingScriptPath).getFile().getAbsolutePath();
