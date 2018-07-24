@@ -26,6 +26,10 @@ public class Recorder {
     @Value("${spring.recording.data.location}")
     private String outputDir;
 
+    @Value("${spring.recording.container}")
+    private String recordingContainer;
+
+
     @Autowired
     public Recorder(RecordingService recordingService) {
         this.recordingService = recordingService;
@@ -37,7 +41,12 @@ public class Recorder {
         //Load params for recording script
         String cameraIpAdress = recording.getRoom().getIpAdress();
         String audioSource = recording.getRoom().getAudioSource();
-        String outputFileName = String.format("%s_%s_%s",recording.getStartTime(), recording.getEndTime(), recording.getTitle());
+        String outputFileName = String.format("%s%s_%s_%s.%s",
+                outputDir,
+                recording.getStartTime(),
+                recording.getEndTime(),
+                recording.getTitle(),
+                recordingContainer);
 
         // Load recording script
         recordingScriptPath = new ClassPathResource(recordingScriptPath).getFile().getAbsolutePath();
@@ -49,6 +58,7 @@ public class Recorder {
         // Set pid and active flag
         recording.setPid(p.pid());
         recording.setActive(true);
+        recording.setRecordingPath(outputFileName);
         // Update recording in DB
         recordingService.saveRecording(recording);
 
@@ -63,10 +73,11 @@ public class Recorder {
             recording.setActive(false);
             recordingService.saveRecording(recording);
 
-            logger.info("Succesfully finished recording of {} starting at {}, ending at {}",
+            logger.info("Succesfully finished recording of {} starting at {}, ending at {}, located at {}",
                     recording.getTitle(),
                     recording.getStartTime(),
-                    recording.getEndTime());
+                    recording.getEndTime(),
+                    recording.getRecordingPath());
         // There was an error during recording
         } else {
             recording.setError(true);

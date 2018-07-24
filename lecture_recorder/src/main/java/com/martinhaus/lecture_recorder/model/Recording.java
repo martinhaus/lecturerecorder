@@ -2,6 +2,7 @@ package com.martinhaus.lecture_recorder.model;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,6 +35,9 @@ public class Recording {
 
     private long pid;
 
+    @Nullable
+    String recordingPath;
+
     @ManyToOne
     @JoinColumn(name="room_id", nullable=false)
     private Room room;
@@ -60,7 +64,7 @@ public class Recording {
         this.room = room;
     }
 
-    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, long pid, Room room) {
+    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, long pid, String recordingPath, Room room) {
         this.title = title;
         this.datetimeCreated = datetimeCreated;
         this.startTime = startTime;
@@ -69,6 +73,7 @@ public class Recording {
         this.finished = finished;
         this.active = active;
         this.pid = pid;
+        this.recordingPath = recordingPath;
         this.room = room;
     }
 
@@ -150,5 +155,13 @@ public class Recording {
 
     public void setPid(long pid) {
         this.pid = pid;
+    }
+
+    public String getRecordingPath() {
+        return recordingPath;
+    }
+
+    public void setRecordingPath(String recordingPath) {
+        this.recordingPath = recordingPath;
     }
 }

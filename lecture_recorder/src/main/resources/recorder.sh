@@ -9,4 +9,4 @@ echo $CAMERA_IP
 echo $AUDIO_SOURCE
 echo $OUTPUT_FILE
 echo "Done"
-exit 1
+exit 0
