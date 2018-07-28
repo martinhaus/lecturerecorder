@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <video controls=""  width="640" height="360">
-            <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4"><!-- Safari / iOS, IE9 -->
+            <!-- <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4"> -->
+             <source :src="recordingDownloadUrl" type="video/mp4">
         </video>
 
         <div class="row">
