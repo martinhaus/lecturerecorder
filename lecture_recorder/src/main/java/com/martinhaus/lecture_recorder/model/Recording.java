@@ -36,7 +36,7 @@ public class Recording {
     private long pid;
 
     @Nullable
-    String recordingPath;
+    private String fileName;
 
     @ManyToOne
     @JoinColumn(name="room_id", nullable=false)
@@ -64,7 +64,7 @@ public class Recording {
         this.room = room;
     }
 
-    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, long pid, String recordingPath, Room room) {
+    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, long pid, String fileName, Room room) {
         this.title = title;
         this.datetimeCreated = datetimeCreated;
         this.startTime = startTime;
@@ -73,7 +73,7 @@ public class Recording {
         this.finished = finished;
         this.active = active;
         this.pid = pid;
-        this.recordingPath = recordingPath;
+        this.fileName = fileName;
         this.room = room;
     }
 
@@ -157,11 +157,11 @@ public class Recording {
         this.pid = pid;
     }
 
-    public String getRecordingPath() {
-        return recordingPath;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setRecordingPath(String recordingPath) {
-        this.recordingPath = recordingPath;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

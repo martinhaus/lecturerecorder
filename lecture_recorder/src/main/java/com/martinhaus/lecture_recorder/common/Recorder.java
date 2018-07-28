@@ -41,16 +41,16 @@ public class Recorder {
         //Load params for recording script
         String cameraIpAdress = recording.getRoom().getIpAdress();
         String audioSource = recording.getRoom().getAudioSource();
-        String outputFileName = String.format("%s%s_%s_%s.%s",
-                outputDir,
-                recording.getStartTime(),
+        String outputFileName = String.format("%s_%s_%s.%s",
+                                recording.getStartTime(),
                 recording.getEndTime(),
                 recording.getTitle(),
                 recordingContainer);
+        String outputFilePath = outputDir + outputFileName;
 
         // Load recording script
         recordingScriptPath = new ClassPathResource(recordingScriptPath).getFile().getAbsolutePath();
-        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFileName);
+        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath);
 
         // Start the process
         Process p = pb.start();
@@ -58,7 +58,7 @@ public class Recorder {
         // Set pid and active flag
         recording.setPid(p.pid());
         recording.setActive(true);
-        recording.setRecordingPath(outputFileName);
+        recording.setFileName(outputFileName);
         // Update recording in DB
         recordingService.saveRecording(recording);
 
@@ -77,7 +77,7 @@ public class Recorder {
                     recording.getTitle(),
                     recording.getStartTime(),
                     recording.getEndTime(),
-                    recording.getRecordingPath());
+                    recording.getFileName());
         // There was an error during recording
         } else {
             recording.setError(true);
