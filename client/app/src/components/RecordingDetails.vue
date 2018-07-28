@@ -15,7 +15,9 @@
             <h4 class="col-6 text-left">{{ recording.datetimeCreated }}</h4>
         </div>
         <div class="row btn-group">
-            <button class="btn btn-primary">Download</button>
+            <form method="get" :action="recordingDownloadUrl">
+                <button type="submit" class="btn btn-primary" >Download</button>
+            </form>
             <button class="btn btn-danger">Delete</button>
         </div>
     </div>
@@ -32,10 +34,11 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      recording: null
+      recording: null,
+      recordingDownloadUrl: null
     }
   },
-  created: function () {
+  mounted: function () {
       this.getRecordingDetails();
   },
   methods: {
@@ -43,6 +46,7 @@ export default {
           axios.get(API_URL + 'recording/' + this.id)
           .then((response) => {
               this.recording = response.data;
+              this.recordingDownloadUrl = API_URL + 'recording/' + this.id + '/download'
           })
       }
   }

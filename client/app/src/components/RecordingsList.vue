@@ -39,9 +39,9 @@ export default {
   created: function () {
     this.getRecordings();
     
-    setInterval(function () {
-      this.getRecordings();
-    }.bind(this), 5000); 
+    // setInterval(function () {
+    //   this.getRecordings();
+    // }.bind(this), 5000); 
   },
   methods: {
     getRecordings: function () {

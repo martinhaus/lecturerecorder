@@ -49,13 +49,12 @@ public class RecordingController {
 
     @RequestMapping(path = "/recording/{id}/download", method = RequestMethod.GET)
     public ResponseEntity<Resource> downloadRecording(@PathVariable("id") long id) throws IOException {
-        Recording recording = recordingService.getRecording(id);
-        File file = new File(recording.getFileName());
 
+        File file = recordingService.getRecordingFile(id);
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.setContentType(MediaType.parseMediaType("application/octet-stream"));
         respHeaders.setContentLength(file.length());
-        respHeaders.setContentDispositionFormData("attachment", recording.getFileName());
+        respHeaders.setContentDispositionFormData("attachment", file.getName());
 
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
