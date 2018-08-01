@@ -106,8 +106,8 @@
                     <url>http://localhost:8090/manager/text</url>
                     <server>TomcatServer</server>
                     <path>/recorder</path>
-                    <username>tomcat</username>
-                    <password>Fu034U4l</password>
+                    <username>deployer</username>
+                    <password>deployer</password>
                     <update>true</update>
                 </configuration>
             </plugin>
