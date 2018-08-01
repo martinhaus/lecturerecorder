@@ -78,10 +78,41 @@
     </dependencies>
 
     <build>
+        <finalName>recorder</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>target</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat9-maven-plugin</artifactId>
+                <configuration>
+                    <url>http://localhost:8090/manager/text</url>
+                    <server>TomcatServer</server>
+                    <path>/recorder</path>
+                    <username>admin</username>
+                    <password>Fu034U4l</password>
+                    <update>true</update>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.9.0</version>
             </plugin>
         </plugins>
     </build>
