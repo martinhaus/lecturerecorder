@@ -6,7 +6,7 @@
     <groupId>com.martinhaus</groupId>
     <artifactId>lecture_recorder</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>lecture_recorder</name>
     <description>Software for recording lectures</description>
