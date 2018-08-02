@@ -1,11 +1,27 @@
 <template>
   <div>
+    <div class="container">
+     <b-alert variant="success"
+             dismissible
+             fade
+             :show="showSuccessAlert"
+             @dismissed="showSuccessAlert=false">
+      Recording scheduled
+      </b-alert>
+      <b-alert variant="danger"
+             dismissible
+             fade
+             :show="showErrorAlert"
+             @dismissed="showErrorAlert=false">
+      Failed to schedule
+      </b-alert>
+    </div>
+    
     <h1>Schedule recording</h1>
     <h5>Fill the form below to schedule new recording</h5>
-
     
     <div class="container">
-      <form @submit.prevent="scheduleRecording">
+        <form @submit.prevent="scheduleRecording">
 
         <div class="row justify-content-center">
           <div class="col-2">
@@ -84,6 +100,8 @@ export default {
        duration: 0,
        rooms: null,
        selectedRoom: 0,  
+       showSuccessAlert: false,
+       showErrorAlert: false
     }
   },
   components: {
@@ -101,6 +119,10 @@ export default {
         startTime: this.startDatetime,
         endTime: this.endDatetime,
         room: this.rooms[this.selectedRoom]
+      }).then(() => {
+        this.showSuccessAlert = true;
+      }).catch(function () {
+        this.showErrorAlert = true;
       })
     },
     calculateDuration: function() {
