@@ -36,8 +36,10 @@ public class RecordingScheduler {
     public void checkSchedules() {
         // Get now and ignore miliseconds
         LocalDateTime now = LocalDateTime.now().withNano(0).withSecond(0    );
+        // List of recordings that should start this minute
         List<Recording> toRecord = recordingService.getScheduledRecordings(now);
 
+        // Start all scheduled recordings
         for (Recording recording: toRecord) {
             try {
                 recorder.runRecordingScript(recording);
