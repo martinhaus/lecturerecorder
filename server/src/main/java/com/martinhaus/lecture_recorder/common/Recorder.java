@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 
 @Component
 public class Recorder {
@@ -47,7 +48,9 @@ public class Recorder {
                 recordingContainer);
         String outputFilePath = outputDir + outputFileName;
 
-        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath);
+        long duration = ChronoUnit.SECONDS.between(recording.getStartTime(), recording.getEndTime());
+
+        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath, Long.toString(duration));
 
         // Start the process
         Process p = pb.start();
