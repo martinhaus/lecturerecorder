@@ -51,7 +51,8 @@ public class Recorder {
         long duration = ChronoUnit.SECONDS.between(recording.getStartTime(), recording.getEndTime());
 
         ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath, Long.toString(duration));
-
+        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
         // Start the process
         Process p = pb.start();
 
