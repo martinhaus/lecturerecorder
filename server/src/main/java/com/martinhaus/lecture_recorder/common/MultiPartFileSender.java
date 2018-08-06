@@ -215,7 +215,7 @@ public class MultiPartFileSender {
 
             if (ranges.isEmpty() || ranges.get(0) == full) {
                 // Return full file.
-                logger.info("Return full file");
+                logger.debug("Return full file");
                 response.setContentType(contentType);
                 response.setHeader("Content-Range", "bytes " + full.start + "-" + full.end + "/" + full.total);
                 response.setHeader("Content-Length", String.valueOf(full.length));
@@ -225,7 +225,7 @@ public class MultiPartFileSender {
 
                 // Return single part of file.
                 Range r = ranges.get(0);
-                logger.info("Return 1 part of file : from ({}) to ({})", r.start, r.end);
+                logger.debug("Return 1 part of file : from ({}) to ({})", r.start, r.end);
                 response.setContentType(contentType);
                 response.setHeader("Content-Range", "bytes " + r.start + "-" + r.end + "/" + r.total);
                 response.setHeader("Content-Length", String.valueOf(r.length));
@@ -244,7 +244,7 @@ public class MultiPartFileSender {
 
                 // Copy multi part range.
                 for (Range r : ranges) {
-                    logger.info("Return multi part of file : from ({}) to ({})", r.start, r.end);
+                    logger.debug("Return multi part of file : from ({}) to ({})", r.start, r.end);
                     // Add multipart boundary and header fields for every range.
                     sos.println();
                     sos.println("--" + MULTIPART_BOUNDARY);
