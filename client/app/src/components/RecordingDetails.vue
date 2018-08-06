@@ -5,7 +5,7 @@
              <source :src="recordingDownloadUrl" type="video/mp4">
         </video>
 
-        <div class="row">
+        <div class="row" v-if="recording.room">
             <h1 class="col">{{ recording.title }} | {{ recording.room.name }}</h1>
         </div>
         <div class="row">
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      recording: null,
+      recording: {},
       recordingDownloadUrl: null
     }
   },
