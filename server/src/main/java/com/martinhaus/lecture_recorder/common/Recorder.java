@@ -10,7 +10,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.TimeZone;
 
 @Component
 public class Recorder {
@@ -48,9 +52,13 @@ public class Recorder {
                 recordingContainer);
         String outputFilePath = outputDir + outputFileName;
 
-        long duration = ChronoUnit.SECONDS.between(recording.getStartTime(), recording.getEndTime());
+        long duration = ChronoUnit.MILLIS.between(recording.getStartTime(), recording.getEndTime());
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(tz);
+        String time = df.format(new Date(duration));
 
-        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath, Long.toString(duration));
+        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath, time);
         pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         pb.redirectError(ProcessBuilder.Redirect.INHERIT);
         // Start the process
