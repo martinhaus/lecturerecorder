@@ -5,6 +5,6 @@ AUDIO_SOURCE=$2
 OUTPUT_FILE=$3
 DURATION=$4
 
-COMMAND="arecord -f cd -r 48000 -D "$(AUDIO_SOURCE)" | ffmpeg -t $(DURATION) -thread_queue_size 1024  -i - -thread_queue_size 1024 -i rtsp://"$(CAMERA_IP)" -c:v copy -c:a aac -strict -2 "$(OUTPUT_FILE)""
-eval $(COMMAND)
+COMMAND="arecord -f cd -r 48000 -D "$AUDIO_SOURCE" | ffmpeg -t $DURATION -thread_queue_size 1024  -i - -thread_queue_size 1024 -i rtsp://"$CAMERA_IP" -c:v copy -c:a aac -strict -2 "$OUTPUT_FILE""
+eval $COMMAND
 exit 0
