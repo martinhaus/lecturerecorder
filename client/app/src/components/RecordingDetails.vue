@@ -1,11 +1,10 @@
 <template>
     <div class="container">
         <video controls=""  width="640" height="360">
-            <!-- <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4"> -->
              <source :src="recordingDownloadUrl" type="video/mp4">
         </video>
 
-        <div class="row" v-if="recording.room">
+        <div class="row">
             <h1 class="col">{{ recording.title }} | {{ recording.room.name }}</h1>
         </div>
         <div class="row">
