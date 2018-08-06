@@ -52,7 +52,7 @@ public class RecordingController {
 
         File file = recordingService.getRecordingFile(id);
         HttpHeaders respHeaders = new HttpHeaders();
-        respHeaders.setContentType(MediaType.parseMediaType("application/video-mp4"));
+        respHeaders.setContentType(MediaType.parseMediaType("video/mp4"));
         respHeaders.setContentLength(file.length());
         respHeaders.setContentDispositionFormData("attachment", file.getName());
 
