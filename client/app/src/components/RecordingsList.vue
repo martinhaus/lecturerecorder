@@ -8,15 +8,24 @@
           <th scope="col">Room</th>
           <th scope="col">Start</th>
           <th scope="col">End</th>
+          <th scope="col">Duration</th>
         </tr>
       </thead>
       <tbody>
-        <router-link tag="tr" :to="{path: '/recording/' + recording.id}" class="clickable-row" v-for="recording in recordings" :key="recording.id">
+        <router-link  tag="tr" :to="{path: '/recording/' + recording.id}" class="clickable-row" v-for="recording in recordings" :key="recording.id">
           <td>{{ recording.id }}</td>
-          <td>{{ recording.title }}</td>
+          <td>{{ recording.title }}
+            <div v-if="recording.active" class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+              role="progressbar" aria-valuenow="10" aria-valuemin="0" 
+              aria-valuemax="100"
+               :style="calculateProgress(recording.startTime, recording.endTime)"></div>
+            </div>
+          </td>
           <td>{{ recording.room.name }}</td>
           <td>{{ recording.startTime }}</td>
           <td>{{ recording.endTime }}</td>
+          <td>{{ calculateDurationMinutes(recording.startTime, recording.endTime) }} minutes</td>
         </router-link>
       </tbody>
     </table>
@@ -25,7 +34,7 @@
 
 <script>
 import axios from 'axios';
-
+import moment from 'moment'
 
 const API_URL = process.env.VUE_APP_ROOT_API
 
@@ -49,6 +58,15 @@ export default {
       .then((response) => {
         this.recordings = response.data;
       })
+    },
+    calculateDurationMinutes: function (start, end) {
+      let duration =  moment(end).diff(moment(start));
+      return moment.duration(duration).asMinutes();
+    },
+    calculateProgress: function (start, end) {
+      let all = moment(end).diff(moment(start));
+      let current = moment().diff(moment(start))
+      return "width: " + current / all * 100 + "%;"
     }
   }
 }
