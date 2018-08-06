@@ -4,9 +4,7 @@ import com.martinhaus.lecture_recorder.common.MultiPartFileSender;
 import com.martinhaus.lecture_recorder.model.Recording;
 import com.martinhaus.lecture_recorder.services.RecordingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,13 +46,9 @@ public class RecordingController {
 
     @RequestMapping(path = "/recording/{id}/download", method = RequestMethod.GET)
     public void downloadRecording(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
-
         File file = recordingService.getRecordingFile(id);
-        HttpHeaders respHeaders = new HttpHeaders();
-        respHeaders.setContentType(MediaType.parseMediaType("video/mp4"));
-        respHeaders.setContentLength(file.length());
-        respHeaders.setContentDispositionFormData("attachment", file.getName());
         Path path = Paths.get(file.getAbsolutePath());
+
         try {
             MultiPartFileSender.fromPath(path)
                     .with(request)
