@@ -18,7 +18,19 @@
             <form method="get" :action="recordingDownloadUrl">
                 <button type="submit" class="btn btn-primary" >Download</button>
             </form>
-            <button class="btn btn-danger">Delete</button>
+            <b-btn class="btn-danger" v-b-modal.deleteModal>Delete</b-btn>
+        </div>
+
+        <div>
+            <!-- Modal Component -->
+            <b-modal id="deleteModal" title="Delete recording?">
+                <p class="my-4">Are you sure you want to delete this recording?</p>
+                <p><b>It cannot be undone.</b></p>
+                <div slot="modal-footer" class="w-100">
+                    <b-btn variant="outline-primary" @click="hideModal">Cancel</b-btn>
+                    <b-btn variant="danger" @click="deleteRecording">Delete</b-btn>
+                </div>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -48,7 +60,16 @@ export default {
               this.recording = response.data;
               this.recordingDownloadUrl = API_URL + 'recording/' + this.id + '/download'
           })
-      }
+      },
+      deleteRecording: function () {
+          axios.get(API_URL + 'recording/' + this.id + '/delete')
+          .then(() => {
+            this.$router.push('/')
+          })
+      },
+      hideModal () {
+        this.$root.$emit('bv::hide::modal','deleteModal')
+    }
   }
 }
 </script>
