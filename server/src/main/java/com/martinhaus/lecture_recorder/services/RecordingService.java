@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -52,5 +53,20 @@ public class RecordingService {
         Recording recording = this.getRecording(id);
         File file = new File(outputDir + recording.getFileName());
         return file;
+    }
+
+    private void killActiveRecording(long pid) throws IOException {
+        Runtime rt = Runtime.getRuntime();
+        Process pr = rt.exec("kill -9 " + Long.toString(pid));
+    }
+
+    public void deleteRecording(long id) throws IOException {
+        Recording recording = recordingRepository.findById(id);
+
+        if (recording.isActive()) {
+            killActiveRecording(recording.getPid());
+        }
+
+        recordingRepository.delete(recording);
     }
 }

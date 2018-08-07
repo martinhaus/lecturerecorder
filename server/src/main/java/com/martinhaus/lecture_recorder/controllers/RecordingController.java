@@ -3,6 +3,8 @@ package com.martinhaus.lecture_recorder.controllers;
 import com.martinhaus.lecture_recorder.common.MultiPartFileSender;
 import com.martinhaus.lecture_recorder.model.Recording;
 import com.martinhaus.lecture_recorder.services.RecordingService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,6 +22,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class RecordingController {
+
+    private static final Logger logger = LogManager.getLogger(RecordingController.class);
 
     final private
     RecordingService recordingService;
@@ -57,6 +62,17 @@ public class RecordingController {
         } catch (Exception e) {
 
         }
+    }
+
+    @RequestMapping(path= "/recording/{id}/delete")
+    public ResponseEntity deleteRecording(@PathVariable("id") long id) {
+        try {
+            recordingService.deleteRecording(id);
+        } catch (IOException e) {
+            logger.error("Error while deleting recording", e);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
 
