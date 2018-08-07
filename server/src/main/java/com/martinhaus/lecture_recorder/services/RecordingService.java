@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,7 +68,13 @@ public class RecordingService {
         if (recording.isActive()) {
             killActiveRecording(recording.getPid());
         }
-
+        deleteRecordingFile(recording);
         recordingRepository.delete(recording);
+    }
+
+    private void deleteRecordingFile(Recording recording) throws IOException {
+        String path = outputDir + recording.getFileName();
+        Files.deleteIfExists(Paths.get(path));
+
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.TimeZone;
@@ -96,6 +95,5 @@ public class Recorder {
                     recording.getStartTime(),
                     recording.getEndTime());
         }
-
     }
 }
