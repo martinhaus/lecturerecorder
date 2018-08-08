@@ -1,6 +1,10 @@
 # LectureRecorder
 
-## TODOs
+
+> Software for recording RTSP video streams with independed audio from sound cards. 
+
+
+## Possible improvements
 
 * Create installation script
 
@@ -55,6 +59,7 @@ User that runs tomcat has to have access to sound cards in order to record.
 3. Configure your webserver to 
 
     Sample Apache configuration - Tomcat running on `port 8090`. Apache is passing all requests from `/api` to application backend.
+    
     ```
     <IfModule mod_ssl.c>
     <VirtualHost *:443>
