@@ -4,6 +4,10 @@
 > Software for recording RTSP video streams with independed audio from sound cards. 
 
 
+## Technology
+
+Backend is based on Spring Boot and runs on Tomcat server. Frontend is a simple Vue application.
+
 ## Possible improvements
 
 * Create installation script
