@@ -21,6 +21,7 @@
               aria-valuemax="100"
                :style="calculateProgress(recording.startTime, recording.endTime)"></div>
             </div>
+            <font-awesome-icon v-if="recording.finished" icon="check-circle" />
           </td>
           <td>{{ recording.room.name }}</td>
           <td>{{ recording.startTime }}</td>
