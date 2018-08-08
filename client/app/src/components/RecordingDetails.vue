@@ -1,9 +1,13 @@
 <template>
     <div class="container">
-        <video controls=""  width="640" height="360">
+        
+        <h3 class="font-italic" v-if="!recording.finished">Preview will be available after recording is finished</h3>
+
+        
+        <video v-if="recording.finished" controls=""  width="640" height="360">
              <source :src="recordingDownloadUrl" type="video/mp4">
         </video>
-
+        
         <div class="row">
             <h1 class="col">{{ recording.title }} | {{ recording.room.name }}</h1>
         </div>
@@ -16,7 +20,8 @@
         </div>
         <div class="row btn-group">
             <form method="get" :action="recordingDownloadUrl">
-                <button type="submit" class="btn btn-primary" >Download</button>
+                <button v-if="recording.finished" type="submit" class="btn btn-primary">Download</button>
+                <button v-else disabled type="submit" class="btn btn-primary">Download</button>
             </form>
             <b-btn class="btn-danger" v-b-modal.deleteModal>Delete</b-btn>
         </div>
