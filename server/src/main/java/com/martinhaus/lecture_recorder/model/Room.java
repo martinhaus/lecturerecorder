@@ -1,13 +1,15 @@
 package com.martinhaus.lecture_recorder.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="rooms")
 public class Room {
 
@@ -18,21 +20,10 @@ public class Room {
     private String ipAdress;
     private String audioSource;
 
-    @OneToMany(mappedBy="room")
-    private List<Recording> recordings;
-
     public Room(String name, String ipAdress, String audioSource) {
 
         this.name = name;
         this.ipAdress = ipAdress;
         this.audioSource = audioSource;
-    }
-
-
-    public Room(String name, String ipAdress, String audioSource, List<Recording> recordings) {
-        this.name = name;
-        this.ipAdress = ipAdress;
-        this.audioSource = audioSource;
-        this.recordings = recordings;
     }
 }

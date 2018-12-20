@@ -1,5 +1,6 @@
 package com.martinhaus.lecture_recorder.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -12,7 +13,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="recordings")
 public class Recording {
 
