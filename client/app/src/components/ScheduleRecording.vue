@@ -50,7 +50,7 @@
             <label for="startDatetime">Scheduled start</label>
           </div>
           <div class="col-2">
-            <datetime id="startDatetime" type="datetime" v-on:input="calculateDuration" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="startDatetime"></datetime>
+            <datetime id="startDatetime" type="datetime" v-on:input="approximateEndTime" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="startDatetime"></datetime>
           </div>
         </div>
 
@@ -89,7 +89,8 @@ import 'vue-datetime/dist/vue-datetime.css';
 import moment from 'moment';
 import axios from 'axios';
 
-const API_URL = process.env.VUE_APP_ROOT_API
+const API_URL = process.env.VUE_APP_ROOT_API;
+const DEFAULT_DURATION = process.env.VUE_APP_DEFAULT_RECORDING_DURATION_MINUTES;
 
 export default {    
   data () {
@@ -124,6 +125,15 @@ export default {
       }).catch(function () {
         this.showErrorAlert = true;
       })
+    },
+    approximateEndTime() {
+      // Add default length of the recording to approximate end time
+      if (this.startDatetime != '') {
+        this.endDatetime = moment(this.startDatetime).add(DEFAULT_DURATION, 'minutes').format('YYYY-MM-DDTHH:mm:ss');
+      }
+
+      // Also calculate duration
+      this.calculateDuration();
     },
     calculateDuration: function() {
       if (this.endDatetime != '' && this.startDatetime != '') {
