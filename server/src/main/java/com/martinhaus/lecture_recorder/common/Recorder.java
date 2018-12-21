@@ -42,7 +42,7 @@ public class Recorder {
     public void runRecordingScript(Recording recording) throws IOException, InterruptedException {
 
         //Load params for recording script
-        String cameraIpAdress = recording.getRoom().getIpAdress();
+        String cameraIpAdress = recording.getRoom().getIpAddress();
         String audioSource = recording.getRoom().getAudioSource();
         String outputFileName = String.format("%s_%s_%s.%s",
                                 recording.getStartTime(),

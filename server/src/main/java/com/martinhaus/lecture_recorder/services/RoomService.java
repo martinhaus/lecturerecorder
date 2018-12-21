@@ -20,4 +20,8 @@ public class RoomService {
     public List<Room> getAll() {
         return roomRepository.findAll();
     }
+
+    public void saveRoom(Room room) {
+        roomRepository.save(room);
+    }
 }

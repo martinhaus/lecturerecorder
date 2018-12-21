@@ -10,6 +10,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/">Recordings</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/rooms">Rooms</router-link>
+          </li>
         </ul>
         <router-link class="btn btn-outline-danger my-2 my-sm-0" to="/schedule" tag="button">Schedule recording</router-link>
       </div>
