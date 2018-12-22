@@ -36,10 +36,6 @@ export default {
   },
   created: function () {
     this.getRooms();
-    
-    // setInterval(function () {
-    //   this.getRecordings();
-    // }.bind(this), 5000); 
   },
   methods: {
     getRooms: function () {

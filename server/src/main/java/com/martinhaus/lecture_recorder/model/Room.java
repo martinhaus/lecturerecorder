@@ -19,6 +19,8 @@ public class Room {
     private String name;
     private String ipAddress;
     private String audioSource;
+    private String timetableId;
+    private String timetableRoomName;
 
     public Room(String name, String ipAddress, String audioSource) {
 

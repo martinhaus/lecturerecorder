@@ -33,19 +33,6 @@
           </div>
         </div>
 
-        <!-- available rooms for recordings -->
-        <!-- <div class="row justify-content-center">
-          <div class="col-2">
-            <label for="room">Room</label>
-          </div>
-          <div class="col-2">
-            <select v-model='selectedRoom' id="room">
-              <option v-for="(room, index) in rooms" :key="room.id" :value="index">{{ room.name }}</option>
-            </select>
-          </div>
-        </div>
-         -->
-
         <!-- ip address of camera -->
         <div class="row justify-content-center">
           <div class="col-2">
@@ -65,6 +52,19 @@
             <input id="audioSource" type="text" v-model="audioSource" />
           </div>
         </div>
+
+        <!-- available rooms for recordings -->
+        <div class="row justify-content-center">
+          <div class="col-2">
+            <label for="room">Room</label>
+          </div>
+          <div class="col-2">
+            <select v-model='selectedRoomOption' id="timetable">
+              <option v-for="(roomOption, index) in roomOptions" :key="roomOption.id" :value="index">{{ roomOption.title }}</option>
+            </select>
+          </div>
+        </div>
+        
         <div class="row justify-content-center">
          <button class="btn btn-primary">Submit</button> 
         </div>
@@ -84,27 +84,38 @@ const API_URL = process.env.VUE_APP_ROOT_API;
 
 export default {    
   data () {
-    return {
-        name: '',
-        ipAddress: '',
-        audioSource: '',
-    }
+      return {
+          name: '',
+          ipAddress: '',
+          audioSource: '',
+          roomOptions: {},
+          selectedRoomOption: 0,
+      }
   },
   created: function () {
+    this.getRoomOptions();
   },
   methods: {
-    scheduleRecording() {
+      scheduleRecording() {
       axios.post(API_URL + 'rooms/add', {
-        name: this.name,
-        ipAddress: this.ipAddress,
-        audioSource: this.audioSource,
-        // room: this.rooms[this.selectedRoom]
+          name: this.name,
+          ipAddress: this.ipAddress,
+          audioSource: this.audioSource,
+          timetableId: this.roomOptions[this.selectedRoomOption].id,
+          timetableRoomName: this.roomOptions[this.selectedRoomOption].title
+          // room: this.rooms[this.selectedRoom]
       }).then(() => {
-        this.showSuccessAlert = true;
+          this.showSuccessAlert = true;
       }).catch(function () {
-        this.showErrorAlert = true;
+          this.showErrorAlert = true;
       })
-    },
+      },
+      getRoomOptions() {
+        axios.get(API_URL + 'timetables/available')
+        .then((response) => {
+          this.roomOptions = response.data;
+        })
+      }
   }
 }
 </script>
