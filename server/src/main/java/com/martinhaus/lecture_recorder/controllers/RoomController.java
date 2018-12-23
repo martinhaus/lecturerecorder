@@ -25,7 +25,7 @@ public class RoomController {
         return new ResponseEntity<>(roomService.getAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/rooms/add")
+    @PostMapping(value = "/rooms/add")
     public ResponseEntity addRoom(@RequestBody Room room) throws IOException {
         roomService.saveRoom(room);
         return new ResponseEntity(HttpStatus.OK);
