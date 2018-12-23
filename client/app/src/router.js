@@ -31,7 +31,6 @@ export default new Router({
     {
       path: '/rooms/add',
       component: AddRoom,
-      props: {create: true}
     },
     {
       path: '/room/:id',

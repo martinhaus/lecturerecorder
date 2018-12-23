@@ -16,13 +16,12 @@
         </div>
 
         <div>
-            <!-- Modal Component -->
-            <b-modal id="deleteModal" title="Delete recording?">
-                <p class="my-4">Are you sure you want to delete this recording?</p>
+            <b-modal id="deleteModal" title="Delete room entry?">
+                <p class="my-4">Are you sure you want to delete this room entry?</p>
                 <p><b>It cannot be undone.</b></p>
                 <div slot="modal-footer" class="w-100">
                     <b-btn variant="outline-primary" @click="hideModal">Cancel</b-btn>
-                    <b-btn variant="danger" @click="deleteRecording">Delete</b-btn>
+                    <b-btn variant="danger" @click="deleteRoom">Delete</b-btn>
                 </div>
             </b-modal>
         </div>
@@ -40,6 +39,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      room: ""
     }
   },
   mounted: function () {

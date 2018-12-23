@@ -90,6 +90,8 @@ export default {
           audioSource: '',
           roomOptions: {},
           selectedRoomOption: 0,
+          showSuccessAlert: false,
+          showErrorAlert: false
       }
   },
   created: function () {

@@ -1,6 +1,5 @@
 package com.martinhaus.lecture_recorder.controllers;
 
-import com.martinhaus.lecture_recorder.common.MultiPartFileSender;
 import com.martinhaus.lecture_recorder.model.Recording;
 import com.martinhaus.lecture_recorder.services.RecordingService;
 import org.apache.logging.log4j.LogManager;
@@ -12,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.UUID;
 
 @RestController
 public class RecordingController {
@@ -37,28 +34,18 @@ public class RecordingController {
     }
 
     @GetMapping(value = "/recordings")
-    public ResponseEntity getAllRecordings() {
+    public ResponseEntity<java.util.List<Recording>> getAllRecordings() {
         return new ResponseEntity<>(recordingService.getAllRecordings() ,HttpStatus.OK);
     }
 
     @GetMapping(value = "/recording/{id}")
-    public ResponseEntity getRecording(@PathVariable("id") long id) {
+    public ResponseEntity<Recording> getRecording(@PathVariable("id") long id) {
         return new ResponseEntity<>(recordingService.getRecording(id), HttpStatus.OK);
     }
 
     @GetMapping(path = "/recording/{id}/download")
     public void downloadRecording(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
-        File file = recordingService.getRecordingFile(id);
-        Path path = Paths.get(file.getAbsolutePath());
-
-        try {
-            MultiPartFileSender.fromPath(path)
-                    .with(request)
-                    .with(response)
-                    .serveResource();
-        } catch (Exception e) {
-            logger.debug(e.getMessage());
-        }
+        recordingService.sendRecordingFile(id, request, response);
     }
 
     @RequestMapping(path= "/recording/{id}/delete")
@@ -70,6 +57,17 @@ public class RecordingController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/recording/{id}/create_download_link")
+    public ResponseEntity<String> createUniqueDownloadLink(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(recordingService.createUniqueDownloadLink(id), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/download/{uuid}")
+    public void downloadRecording(@PathVariable("uuid") UUID uuid, HttpServletRequest request, HttpServletResponse response) {
+        Recording recording = recordingService.getRecordingByDownloadUUID(uuid);
+        recordingService.sendRecordingFile(recording.getId(), request, response);
     }
 }
 
