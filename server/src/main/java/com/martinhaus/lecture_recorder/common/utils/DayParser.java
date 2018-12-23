@@ -1,8 +1,7 @@
 package com.martinhaus.lecture_recorder.common.utils;
 
-public class DayParser {
-
-    public static Short parseDayString(String day) {
+class DayParser {
+    static Short parseDayString(String day) {
         switch (day) {
             case "Po": return 0;
             case "Ut": return 1;

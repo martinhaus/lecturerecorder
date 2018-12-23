@@ -20,7 +20,7 @@ public class Recorder {
 
     private static final Logger logger = LogManager.getLogger(Recorder.class);
 
-    final private
+    private final
     RecordingService recordingService;
 
     @Value("${spring.recording.script.path}")

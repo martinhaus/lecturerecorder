@@ -19,7 +19,7 @@ public class RecordingService {
     @Value("${spring.recording.data.location}")
     private String outputDir;
 
-    final private
+    private final
     RecordingRepository recordingRepository;
 
     @Autowired
@@ -53,13 +53,12 @@ public class RecordingService {
 
     public File getRecordingFile(long id) {
         Recording recording = this.getRecording(id);
-        File file = new File(outputDir + recording.getFileName());
-        return file;
+        return new File(outputDir + recording.getFileName());
     }
 
     private void killActiveRecording(long pid) throws IOException {
         Runtime rt = Runtime.getRuntime();
-        Process pr = rt.exec("kill -9 " + Long.toString(pid));
+        rt.exec("kill -9 " + pid);
     }
 
     public void deleteRecording(long id) throws IOException {

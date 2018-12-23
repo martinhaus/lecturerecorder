@@ -46,6 +46,7 @@ public class RecordingScheduler {
             } catch (IOException e) {
                 logger.error("Failed to load recording script ", e);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 logger.error("Recording process was interupted ", e);
             }
         }

@@ -6,15 +6,9 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class RoomController {
@@ -26,12 +20,12 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @RequestMapping(value = "/rooms", method = GET)
+    @GetMapping(value = "/rooms")
     public ResponseEntity<java.util.List<Room>> getAllRooms() {
         return new ResponseEntity<>(roomService.getAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/rooms/add", method = POST)
+    @GetMapping(value = "/rooms/add")
     public ResponseEntity addRoom(@RequestBody Room room) throws IOException {
         roomService.saveRoom(room);
         return new ResponseEntity(HttpStatus.OK);

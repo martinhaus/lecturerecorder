@@ -30,25 +30,19 @@ public class TimetableParser {
         return begin;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static Lesson parseLessonEntry(Element dataElement, int start, String day) {
         //Mark block start and finish time
         int lessonStart = start;
         int lessonEnd = start += Integer.valueOf(dataElement.attr("colspan"));
         String lessonName = "";
         String teacher = "";
-        String room = "";
         //Valid lesson entry
         if(dataElement.className().contains("rozvrh-cvic") || dataElement.className().contains("rozvrh-pred")) {
             int counter = 0;
 
             for (Element anchor : dataElement.getElementsByTag("a")) {
                 counter ++;
-                //Lesson room
-                if( counter == 1) {
-                    room = anchor.text();
-                    room = room.replace(" (BA-MD-FIIT)","");
-                }
-
                 //Lesson name
                 if ( counter == 2 ) {
                     lessonName = anchor.text();

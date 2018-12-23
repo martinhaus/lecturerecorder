@@ -17,15 +17,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 @RestController
 public class RecordingController {
 
     private static final Logger logger = LogManager.getLogger(RecordingController.class);
 
-    final private
+    private final
     RecordingService recordingService;
 
     @Autowired
@@ -33,23 +30,23 @@ public class RecordingController {
         this.recordingService = recordingService;
     }
 
-    @RequestMapping(value = "/recording/schedule", method = POST)
+    @PostMapping(value = "/recording/schedule")
     public ResponseEntity scheduleRecording(@RequestBody Recording recording) {
         recordingService.saveRecording(recording);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/recordings", method = GET)
+    @GetMapping(value = "/recordings")
     public ResponseEntity getAllRecordings() {
         return new ResponseEntity<>(recordingService.getAllRecordings() ,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/recording/{id}", method = GET)
+    @GetMapping(value = "/recording/{id}")
     public ResponseEntity getRecording(@PathVariable("id") long id) {
         return new ResponseEntity<>(recordingService.getRecording(id), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/recording/{id}/download", method = RequestMethod.GET)
+    @GetMapping(path = "/recording/{id}/download")
     public void downloadRecording(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
         File file = recordingService.getRecordingFile(id);
         Path path = Paths.get(file.getAbsolutePath());
@@ -60,7 +57,7 @@ public class RecordingController {
                     .with(response)
                     .serveResource();
         } catch (Exception e) {
-
+            logger.debug(e.getMessage());
         }
     }
 

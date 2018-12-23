@@ -1,14 +1,10 @@
 package com.martinhaus.lecture_recorder.common.utils;
 
-import lombok.NoArgsConstructor;
-
 import java.util.Calendar;
 import java.util.Date;
 
-@NoArgsConstructor
-public class TimeParser {
-
-    public static Date getDateFromHour(int hour) {
+class TimeParser {
+    static Date getDateFromHour(int hour) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE,0);
