@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -30,7 +32,7 @@ public class RoomController {
     }
 
     @RequestMapping(value = "/rooms/add", method = POST)
-    public ResponseEntity addRoom(@RequestBody Room room) {
+    public ResponseEntity addRoom(@RequestBody Room room) throws IOException {
         roomService.saveRoom(room);
         return new ResponseEntity(HttpStatus.OK);
     }

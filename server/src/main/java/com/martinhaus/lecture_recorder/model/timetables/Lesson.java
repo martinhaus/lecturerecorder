@@ -16,11 +16,15 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Table(name="lessons")
+public
 class Lesson {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
+
+    @NotNull
+    private String title;
 
     @NotNull
     private Date startTime;

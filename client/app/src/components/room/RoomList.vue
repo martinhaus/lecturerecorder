@@ -7,6 +7,7 @@
           <th scope="col">Name</th>
           <th scope="col">Camera IP Address</th>
           <th scope="col">Audio Source</th>
+          <th scope="col">Timetable Room Name</th>
         </tr>
       </thead>
       <tbody>
@@ -15,6 +16,7 @@
           <td>{{ room.name }}</td>
           <td>{{ room.ipAddress }}</td>
           <td>{{ room.audioSource }}</td>
+          <td>{{ room.timetableRoomName }}</td>
         </router-link>
       </tbody>
     </table>

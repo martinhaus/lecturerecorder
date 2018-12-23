@@ -24,8 +24,6 @@ public class Timetable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private short aisId;
-
     String termTitle;
 
     @CreationTimestamp
