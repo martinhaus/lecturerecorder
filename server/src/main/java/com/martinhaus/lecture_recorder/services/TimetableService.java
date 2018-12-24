@@ -5,6 +5,7 @@ import com.martinhaus.lecture_recorder.model.Room;
 import com.martinhaus.lecture_recorder.model.timetables.Lesson;
 import com.martinhaus.lecture_recorder.model.timetables.RoomOption;
 import com.martinhaus.lecture_recorder.model.timetables.Timetable;
+import com.martinhaus.lecture_recorder.repositories.RoomRepository;
 import com.martinhaus.lecture_recorder.repositories.TimetableRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,13 +31,16 @@ public class TimetableService {
     private final
     TimetableRepository timetableRepository;
 
+    private final RoomRepository roomRepository;
+
     private final
     LessonService lessonService;
 
     @Autowired
-    public TimetableService(TimetableRepository timetableRepository, LessonService lessonService) {
+    public TimetableService(TimetableRepository timetableRepository, LessonService lessonService, RoomRepository roomRepository) {
         this.timetableRepository = timetableRepository;
         this.lessonService = lessonService;
+        this.roomRepository = roomRepository;
     }
 
     /**
@@ -134,4 +138,12 @@ public class TimetableService {
         timetableRepository.save(timetable);
     }
 
+    public Timetable getByRoom(Room room) {
+        return timetableRepository.findByRoom(room);
+    }
+
+    public Timetable getByRoomId(long id) {
+        Room room = roomRepository.findById(id);
+        return timetableRepository.findByRoom(room);
+    }
 }

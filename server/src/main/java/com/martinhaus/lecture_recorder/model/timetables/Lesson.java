@@ -27,9 +27,11 @@ class Lesson {
     private String title;
 
     @NotNull
+    @Temporal(TemporalType.TIME)
     private Date startTime;
 
     @NotNull
+    @Temporal(TemporalType.TIME)
     private Date endTime;
 
     @NotNull
