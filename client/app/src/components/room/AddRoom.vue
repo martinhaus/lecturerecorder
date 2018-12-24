@@ -46,7 +46,7 @@
         <!-- audio source name  -->
         <div class="row justify-content-center">
           <div class="col-2">
-            <label for="audioSource">Scheduled end</label>
+            <label for="audioSource">Audio Source</label>
           </div>
           <div class="col-2">
             <input id="audioSource" type="text" v-model="audioSource" />
