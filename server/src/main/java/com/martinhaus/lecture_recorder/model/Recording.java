@@ -66,17 +66,4 @@ public class Recording {
         this.finished = finished;
         this.room = room;
     }
-
-    public Recording(@NotNull String title, Date datetimeCreated, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, boolean error, boolean finished, boolean active, long pid, String fileName, Room room) {
-        this.title = title;
-        this.datetimeCreated = datetimeCreated;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.error = error;
-        this.finished = finished;
-        this.active = active;
-        this.pid = pid;
-        this.fileName = fileName;
-        this.room = room;
-    }
 }

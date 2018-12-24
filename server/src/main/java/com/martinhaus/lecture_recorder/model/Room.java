@@ -17,13 +17,15 @@ public class Room {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
-    private String ipAdress;
+    private String ipAddress;
     private String audioSource;
+    private String timetableId;
+    private String timetableRoomName;
 
-    public Room(String name, String ipAdress, String audioSource) {
+    public Room(String name, String ipAddress, String audioSource) {
 
         this.name = name;
-        this.ipAdress = ipAdress;
+        this.ipAddress = ipAddress;
         this.audioSource = audioSource;
     }
 }

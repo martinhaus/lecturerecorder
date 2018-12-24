@@ -38,8 +38,20 @@
             <label for="room">Room</label>
           </div>
           <div class="col-2">
-            <select v-model='selectedRoom' id="room">
+            <select v-model='selectedRoom' id="room" v-on:change="getTimetable">
               <option v-for="(room, index) in rooms" :key="room.id" :value="index">{{ room.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- available timetables -->
+        <div class="row justify-content-center">
+          <div class="col-2">
+            <label for="timetable">Available Lessons</label>
+          </div>
+          <div class="col-2">
+            <select v-model='selectedLesson' id="timetable" v-on:change="calculateRecordingTimesFromLesson">
+              <option v-for="(lesson, index) in timetable.lessonsList" :key="lesson.id" :value="index">{{ lesson.title }}</option>
             </select>
           </div>
         </div>
@@ -102,7 +114,11 @@ export default {
        rooms: null,
        selectedRoom: 0,  
        showSuccessAlert: false,
-       showErrorAlert: false
+       showErrorAlert: false,
+       timetable: {
+         lessonsList: null
+       },
+       selectedLesson: null,
     }
   },
   components: {
@@ -145,7 +161,48 @@ export default {
       axios.get(API_URL + 'rooms')
       .then((response) => {
         this.rooms = response.data;
+        this.getTimetable();
       })
+    },
+    getTimetable() {
+      axios.get(API_URL + 'room/' + this.rooms[this.selectedRoom].id + '/timetable')
+      .then((response) => {
+        this.timetable = response.data;
+        this.timetable.lessonsList.unshift({id: null, title: "---"});
+      })
+    },
+    calculateRecordingTimesFromLesson() {
+
+        let lesson = this.timetable.lessonsList[this.selectedLesson]
+        
+        let startDatetime = moment().weekday(lesson.dayOfWeek + 1);
+        let startTime = moment(lesson.startTime, 'HH:mm:ss');
+
+        startDatetime.set({
+            hour:   startTime.get('hour'),
+            minute: startTime.get('minute'),
+            second: startTime.get('second')
+        });
+
+        this.startDatetime = startDatetime.format('YYYY-MM-DDTHH:mm:ss');
+        
+
+        let endDatetime = moment().weekday(lesson.dayOfWeek + 1);
+        let endTime = moment(lesson.endTime, 'HH:mm:ss')
+
+        endDatetime.set({
+            hour:   endTime.get('hour'),
+            minute: endTime.get('minute'),
+            second: endTime.get('second')
+        });
+
+        this.endDatetime = endDatetime.format('YYYY-MM-DDTHH:mm:ss');
+        
+        if (lesson.id == null) {
+          this.approximateEndTime();
+        }
+        this.calculateDuration();
+        
     }
   }
 }

@@ -20,11 +20,21 @@
         </div>
         <div class="row btn-group">
             <form method="get" :action="recordingDownloadUrl">
-                <button v-if="recording.finished" type="submit" class="btn btn-primary">Download</button>
-                <button v-else disabled type="submit" class="btn btn-primary">Download</button>
+                <button v-if="recording.finished" type="submit" class="btn btn-outline-primary m-1">Download</button>
+                <button v-else disabled type="submit" class="btn btn-outline-primary m-1">Download</button>
             </form>
-            <b-btn class="btn-danger" v-b-modal.deleteModal>Delete</b-btn>
+            <button v-if="recording.finished" @click="generateDownloadLink" type="submit" class="btn btn-outline-primary m-1">Generate download link</button>
+            <button v-else type="submit" class="btn btn-outline-primary m-1">Generate download link</button>
+            <b-btn class="btn-danger m-1" v-b-modal.deleteModal>Delete</b-btn>
         </div>
+        <transition name="fade">
+            <div v-if="showDownloadUrl" class="row justify-content-center">
+                <div class="col-8 text-center">
+                    <input class="w-100 text-center" type="text" v-model="downloadUrl" />
+                </div>
+            </div>
+        </transition>
+        
 
         <div>
             <!-- Modal Component -->
@@ -51,8 +61,14 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      recording: {},
-      recordingDownloadUrl: null
+      recording: {
+          room: {
+              name: ""
+          }
+      },
+      recordingDownloadUrl: null,
+      downloadUrl: "",
+      showDownloadUrl: false,
     }
   },
   mounted: function () {
@@ -74,6 +90,13 @@ export default {
       },
       hideModal () {
         this.$root.$emit('bv::hide::modal','deleteModal')
+    },
+    generateDownloadLink() {
+        axios.post(API_URL + 'recording/' + this.id + '/create_download_link')
+        .then((response) => {
+            this.downloadUrl = API_URL + '/download/' + response.data 
+            this.showDownloadUrl = true;
+        })
     }
   }
 }
