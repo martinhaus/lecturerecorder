@@ -21,6 +21,8 @@ public class Room {
     private String audioSource;
     private String timetableId;
     private String timetableRoomName;
+    @Column(nullable = true)
+    private Integer cameraScene;
 
     public Room(String name, String ipAddress, String audioSource) {
 
