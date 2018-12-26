@@ -30,7 +30,7 @@
         <transition name="fade">
             <div v-if="showDownloadUrl" class="row justify-content-center">
                 <div class="col-8 text-center">
-                    <input class="w-100 text-center" type="text" v-model="downloadUrl" />
+                    <input class="w-100 text-center" readonly type="text" v-model="downloadUrl" />
                 </div>
             </div>
         </transition>
