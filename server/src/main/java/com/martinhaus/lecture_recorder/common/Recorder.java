@@ -32,10 +32,12 @@ public class Recorder {
     @Value("${spring.recording.container}")
     private String recordingContainer;
 
+    private final EmailService emailService;
 
     @Autowired
-    public Recorder(RecordingService recordingService) {
+    public Recorder(RecordingService recordingService, EmailService emailService) {
         this.recordingService = recordingService;
+        this.emailService = emailService;
     }
 
     @Async
@@ -87,6 +89,8 @@ public class Recorder {
                     recording.getStartTime(),
                     recording.getEndTime(),
                     recording.getFileName());
+            emailService.sendMessage("hauskrecht@fiit.stuba.sk","test", "test");
+
         // There was an error during recording
         } else {
             recording.setError(true);

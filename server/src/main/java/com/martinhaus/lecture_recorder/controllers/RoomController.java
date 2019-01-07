@@ -1,5 +1,6 @@
 package com.martinhaus.lecture_recorder.controllers;
 
+import com.martinhaus.lecture_recorder.common.EmailService;
 import com.martinhaus.lecture_recorder.model.Room;
 import com.martinhaus.lecture_recorder.services.RoomService;
 import javassist.NotFoundException;
@@ -14,10 +15,12 @@ import java.io.IOException;
 public class RoomController {
 
     private final RoomService roomService;
+    private final EmailService emailService;
 
     @Autowired
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, EmailService emailService) {
         this.roomService = roomService;
+        this.emailService = emailService;
     }
 
     @GetMapping(value = "/rooms")
