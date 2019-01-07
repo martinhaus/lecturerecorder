@@ -23,10 +23,13 @@ public class RecordingScheduler {
     private final
     Recorder recorder;
 
+    private final CameraControl cameraControl;
+
     @Autowired
-    public RecordingScheduler(RecordingService recordingService, Recorder recorder) {
+    public RecordingScheduler(RecordingService recordingService, Recorder recorder, CameraControl cameraControl) {
         this.recordingService = recordingService;
         this.recorder = recorder;
+        this.cameraControl = cameraControl;
     }
 
     /**
@@ -35,13 +38,16 @@ public class RecordingScheduler {
     @Scheduled(cron = "0 * * * * *")
     public void checkSchedules() {
         // Get now and ignore miliseconds
-        LocalDateTime now = LocalDateTime.now().withNano(0).withSecond(0    );
+        LocalDateTime now = LocalDateTime.now().withNano(0).withSecond(0);
         // List of recordings that should start this minute
         List<Recording> toRecord = recordingService.getScheduledRecordings(now);
 
         // Start all scheduled recordings
         for (Recording recording: toRecord) {
             try {
+                if (recording.getRoom().getCameraScene() != null) {
+                    cameraControl.setScene(recording.getRoom().getIpAddress(), recording.getRoom().getCameraScene());
+                }
                 recorder.runRecordingScript(recording);
             } catch (IOException e) {
                 logger.error("Failed to load recording script ", e);

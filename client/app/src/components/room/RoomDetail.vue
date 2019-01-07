@@ -11,6 +11,10 @@
             <div class="col-2 font-weight-bold">Audio Source</div>
             <div class="col-2">{{ room.audioSource }}</div>
         </div>
+        <div class="row justify-content-center">
+            <div class="col-2 font-weight-bold">Camera Scene</div>
+            <div class="col-2">{{ room.cameraScene }}</div>
+        </div>
         <div class="row btn-group">
             <b-btn class="btn-danger" v-b-modal.deleteModal>Delete</b-btn>
         </div>

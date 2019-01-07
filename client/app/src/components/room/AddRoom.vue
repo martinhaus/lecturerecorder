@@ -53,6 +53,15 @@
           </div>
         </div>
 
+        <div class="row justify-content-center">
+          <div class="col-2">
+            <label for="cameraScene">Camera Scene</label>
+          </div>
+          <div class="col-2">
+            <input id="cameraScene" type="text" v-model="cameraScene" />
+          </div>
+        </div>
+
         <!-- available rooms for recordings -->
         <div class="row justify-content-center">
           <div class="col-2">
@@ -90,6 +99,7 @@ export default {
           audioSource: '',
           roomOptions: {},
           selectedRoomOption: 0,
+          cameraScene: null,
           showSuccessAlert: false,
           showErrorAlert: false
       }
@@ -104,8 +114,8 @@ export default {
           ipAddress: this.ipAddress,
           audioSource: this.audioSource,
           timetableId: this.roomOptions[this.selectedRoomOption].id,
-          timetableRoomName: this.roomOptions[this.selectedRoomOption].title
-          // room: this.rooms[this.selectedRoom]
+          timetableRoomName: this.roomOptions[this.selectedRoomOption].title,
+          cameraScene: this.cameraScene,
       }).then(() => {
           this.showSuccessAlert = true;
       }).catch(function () {

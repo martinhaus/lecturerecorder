@@ -28,7 +28,7 @@
             <label for="title">Title</label>
           </div>
           <div class="col-2">
-            <input type="text" id="title" v-model="title" />
+            <input class="w-100" type="text" id="title" v-model="title" v-on:keyup="repetitionPreview" />
           </div>
         </div>
 
@@ -50,7 +50,7 @@
             <label for="timetable">Available Lessons</label>
           </div>
           <div class="col-2">
-            <select v-model='selectedLesson' id="timetable" v-on:change="calculateRecordingTimesFromLesson">
+            <select class="w-100" v-model='selectedLesson' id="timetable" v-on:change="calculateRecordingTimesFromLesson">
               <option v-for="(lesson, index) in timetable.lessonsList" :key="lesson.id" :value="index">{{ lesson.title }}</option>
             </select>
           </div>
@@ -62,7 +62,7 @@
             <label for="startDatetime">Scheduled start</label>
           </div>
           <div class="col-2">
-            <datetime id="startDatetime" type="datetime" v-on:input="approximateEndTime" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="startDatetime"></datetime>
+            <datetime class="w-100" id="startDatetime" type="datetime" v-on:input="approximateEndTime" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="startDatetime"></datetime>
           </div>
         </div>
 
@@ -72,7 +72,7 @@
             <label for="endDatetime">Scheduled end</label>
           </div>
           <div class="col-2">
-            <datetime id="endDatetime" type="datetime" v-on:input="calculateDuration" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="endDatetime"></datetime>
+            <datetime class="w-100" id="endDatetime" type="datetime" v-on:input="calculateDuration" value-zone="local" format="yyyy-MM-dd HH:mm" v-model="endDatetime"></datetime>
           </div>
         </div>
 
@@ -86,7 +86,50 @@
           </div>
         </div>
 
-        <button class="btn btn-primary">Schedule</button>
+        <div class="row justify-content-center"> 
+        <div class="col-6">
+          <b-card no-body>
+            <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block v-b-toggle.repeatCollapse variant="btn">Repeat settings</b-btn>
+            </b-card-header>
+          </b-card>
+            <b-collapse id="repeatCollapse">
+              <b-card-body>
+              <div class="row justify-content-center">
+                <label for="repeat-every-week"><input id="repeat-every-week"  class="checkbox" type="checkbox" v-model="repeatEveryWeek" v-on:change="repetitionPreview"/> Repeat every week </label>
+              </div>
+
+              <div class="row justify-content-center">
+                <label for="repeat-count">Repeat <input id="repeat-count"  type="number" v-model="repetitionCount" v-on:change="repetitionPreview"/> times </label>
+              </div>
+              <div class="row justify-content-center">
+                <label for="suffix">Start number of title suffix <input id="suffix"  type="number" v-model="suffixStart" v-on:change="repetitionPreview"/></label>
+              </div>
+              
+              <div class="card card-body" v-if="repeatEveryWeek">
+                <h4>Preview</h4>
+                <table class="table" >
+                  <thead>
+                    <th>Title</th>
+                    <th>Start</th>
+                    <th>End</th>
+                  </thead>
+
+                  <tbody>
+                    <tr v-for="preview in repetitionPreviewList" :key="preview.id">
+                      <td>{{ preview.title }}</td>
+                      <td>{{ preview.startDatetime }}</td>
+                      <td>{{ preview.endDatetime }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              </b-card-body>
+            </b-collapse>
+          </div>
+        </div>
+
+        <button class="btn btn-primary m-2">Schedule</button>
        </form>
     </div>
    
@@ -119,6 +162,10 @@ export default {
          lessonsList: null
        },
        selectedLesson: null,
+       repetitionCount: 0,
+       repeatEveryWeek: false,
+       suffixStart: 1,
+       repetitionPreviewList: []
     }
   },
   components: {
@@ -127,20 +174,36 @@ export default {
   created: function () {
     this.getRooms();
   },
+    watch: {
+      startDatetime: function() {
+        this.repetitionPreview();
+      },
+      endDatetime: function() {
+        this.repetitionPreview();
+      },
+  },
   methods: {
     scheduleRecording() {
       this.startDatetime = moment(this.startDatetime).format('YYYY-MM-DDTHH:mm:ss')
       this.endDatetime = moment(this.endDatetime).format('YYYY-MM-DDTHH:mm:ss')
-      axios.post(API_URL + 'recording/schedule', {
-        title: this.title,
-        startTime: this.startDatetime,
-        endTime: this.endDatetime,
-        room: this.rooms[this.selectedRoom]
-      }).then(() => {
-        this.showSuccessAlert = true;
-      }).catch(function () {
-        this.showErrorAlert = true;
-      })
+
+      let count = 1;
+      if (this.repeatEveryWeek && this.repetitionCount != 0) {
+        count = this.repetitionCount;
+      }
+
+      for (let i=0; i<count; i++) {
+        // Calculate start and end time in each iteration
+        let startDatetime = moment(this.startDatetime).add(7*i, 'days').format('YYYY-MM-DDTHH:mm:ss');
+        let endDatetime = moment(this.endDatetime).add(7*i, 'days').format('YYYY-MM-DDTHH:mm:ss');
+        let title = this.title;
+        
+        if (this.repeatEveryWeek && this.repetitionCount != 0) {
+          title = title + '_' + (parseInt(this.suffixStart) + i);
+        }
+        
+        this.postRecordingSchedule(title, startDatetime, endDatetime, this.rooms[this.selectedRoom])
+      }  
     },
     approximateEndTime() {
       // Add default length of the recording to approximate end time
@@ -203,6 +266,40 @@ export default {
         }
         this.calculateDuration();
         
+    },
+    postRecordingSchedule(title, startDatetime, endDatetime, room) {
+      axios.post(API_URL + 'recording/schedule', {
+        title: title,
+        startTime: startDatetime,
+        endTime: endDatetime,
+        room: room
+      }).then(() => {
+        this.showSuccessAlert = true;
+      }).catch(function () {
+        this.showErrorAlert = true;
+      })
+    },
+    repetitionPreview() {
+      this.repetitionPreviewList = [];
+      if (!this.repeatEveryWeek || this.repetitionCount == 0) {
+        return;
+      }
+      this.startDatetime = moment(this.startDatetime).format('YYYY-MM-DDTHH:mm:ss');
+      this.endDatetime = moment(this.endDatetime).format('YYYY-MM-DDTHH:mm:ss');
+
+      let count = this.repetitionCount;
+
+ 
+
+      for (let i=0; i<count; i++) {
+        // Calculate start and end time in each iteration
+        let startDatetime = moment(this.startDatetime).add(7*i, 'days').format('YYYY-MM-DDTHH:mm:ss');
+        let endDatetime = moment(this.endDatetime).add(7*i, 'days').format('YYYY-MM-DDTHH:mm:ss');
+        let title = this.title;
+        title = title + '_' + (parseInt(this.suffixStart) + i);
+      
+        this.repetitionPreviewList.push({title: title, startDatetime: startDatetime, endDatetime: endDatetime})
+      }  
     }
   }
 }
@@ -210,5 +307,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  #repeat-count {
+    width: 50px;
+  }
+  #suffix {
+    width: 50px;
+  }
 </style>
