@@ -36,7 +36,6 @@ public class RoomController {
 
     @RequestMapping(value = "/room/{id}")
     public ResponseEntity<Room> getRoom(@PathVariable long id) throws NotFoundException {
-        emailService.sendMessage("hauskrecht@fiit.stuba.sk","test", "test");
         return new ResponseEntity<>(roomService.getRoomById(id), HttpStatus.OK);
     }
 }
