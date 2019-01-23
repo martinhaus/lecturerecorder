@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,8 +19,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name="recordings")
 public class Recording {
-
-    //TODO dat deafult false pre boolean
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -47,6 +46,9 @@ public class Recording {
     @ManyToOne
     @JoinColumn(name="room_id", nullable=false)
     private Room room;
+
+    @OneToMany(mappedBy = "recording", cascade = CascadeType.ALL)
+    private Set<RecordingDownload> downloadSet;
 
     public Recording(String title, Date datetimeCreated, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
         this.title = title;

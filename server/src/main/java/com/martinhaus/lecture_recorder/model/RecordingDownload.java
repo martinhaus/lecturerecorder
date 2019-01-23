@@ -17,6 +17,7 @@ public class RecordingDownload {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "recording_id")
     private Recording recording;
     private String uuid;
 
