@@ -24,7 +24,7 @@
                 <button v-else disabled type="submit" class="btn btn-outline-primary m-1">Download</button>
             </form>
             <button v-if="recording.finished" @click="generateDownloadLink" type="submit" class="btn btn-outline-primary m-1">Generate download link</button>
-            <button v-else type="submit" class="btn btn-outline-primary m-1">Generate download link</button>
+            <button v-else disabled type="submit" class="btn btn-outline-primary m-1">Generate download link</button>
             <b-btn class="btn-danger m-1" v-b-modal.deleteModal>Delete</b-btn>
         </div>
         <transition name="fade">
