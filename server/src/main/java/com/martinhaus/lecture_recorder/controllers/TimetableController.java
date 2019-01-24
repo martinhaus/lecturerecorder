@@ -26,6 +26,12 @@ public class TimetableController {
         return new ResponseEntity<>(timetableService.getAvailableTimetables(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/timetables/update")
+    public ResponseEntity updateAllTimetables() throws IOException {
+        timetableService.updateAllTimetables();
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @GetMapping(value = "/room/{id}/timetable")
     public ResponseEntity<com.martinhaus.lecture_recorder.model.timetables.Timetable> getByRoomId(@PathVariable("id") Long id) {
         Timetable timetable = timetableService.getByRoomId(id);
