@@ -1,5 +1,12 @@
 <template>
   <div class="container">
+    <b-alert variant="success"
+             dismissible
+             fade
+             :show="showSuccessAlert"
+             @dismissed="showSuccessAlert=false">
+      All available timetables were updated
+      </b-alert>
     <table class="table table-hover">
       <thead>
         <tr>
@@ -21,6 +28,7 @@
       </tbody>
     </table>
     <router-link class="btn btn-outline-primary my-2 my-sm-0" to="/rooms/add" tag="button">Add New Room</router-link>
+    <button class="btn btn-outline-primary my-2 my-sm-0" @click="updateAllTimetables">Update all timetables</button>
   </div>
 </template>
 
@@ -33,7 +41,8 @@ export default {
   name: 'RoomList',
   data() {
     return {
-      rooms: []
+      rooms: [],
+      showSuccessAlert: false,
     }
   },
   created: function () {
@@ -46,6 +55,12 @@ export default {
         this.rooms = response.data;
       })
     },
+    updateAllTimetables: function () {
+      axios.get(API_URL + "timetables/update")
+      .then(() => {
+        this.showSuccessAlert = true;
+      })
+    }
   }
 }
 </script>
