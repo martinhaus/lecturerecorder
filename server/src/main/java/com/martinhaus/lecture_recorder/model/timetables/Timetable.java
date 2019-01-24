@@ -36,6 +36,6 @@ public class Timetable {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Lesson> lessonsList;
 }

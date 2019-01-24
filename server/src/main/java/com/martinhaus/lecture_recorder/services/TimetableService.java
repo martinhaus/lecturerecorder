@@ -146,4 +146,26 @@ public class TimetableService {
         Room room = roomRepository.findById(id);
         return timetableRepository.findByRoom(room);
     }
+
+    private void updateTimetable(Timetable timetable) throws IOException {
+        String timetableId = timetable.getRoom().getTimetableId();
+        Timetable t = parseTimetableDoc(getWholeUnparsedTimetable(timetableId));
+        timetable.getLessonsList().clear();
+        timetable.getLessonsList().addAll(t.getLessonsList());
+        timetable.setTermTitle(t.getTermTitle());
+        timetableRepository.save(timetable);
+    }
+
+    public void updateAllTimetables() throws IOException {
+        List<Timetable> allTimetables = getAllTimetables();
+
+        // Search all timetables for match with available ones
+        for (Timetable timetable:allTimetables) {
+            updateTimetable(timetable);
+        }
+    }
+
+    private List<Timetable> getAllTimetables() {
+        return  (List<Timetable>) timetableRepository.findAll();
+    }
 }
