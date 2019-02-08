@@ -115,7 +115,11 @@ public class TimetableService {
                 else if (!dataElement.className().equals("odsazena")) {
                     //Block larger than one hour
                     if ( !dataElement.attributes().get("colspan").isEmpty()) {
-                        Lesson lesson = TimetableParser.parseLessonEntry(dataElement, start, day);
+                        Lesson lesson = null;
+                        if (!day.equals("") && start != 0) {
+                            lesson = TimetableParser.parseLessonEntry(dataElement, start, day);
+                        }
+
                         if (lesson != null) {
                             lessonService.saveLesson(lesson);
                             lessons.add(lesson);
