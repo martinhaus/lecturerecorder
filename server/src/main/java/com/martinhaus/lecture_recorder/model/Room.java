@@ -1,5 +1,7 @@
 package com.martinhaus.lecture_recorder.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.martinhaus.lecture_recorder.model.timetables.Timetable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,10 @@ public class Room {
     private String timetableRoomName;
     @Column(nullable = true)
     private Integer cameraScene;
+
+    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Timetable timetable;
 
     public Room(String name, String ipAddress, String audioSource) {
 

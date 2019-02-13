@@ -38,4 +38,10 @@ public class RoomController {
     public ResponseEntity<Room> getRoom(@PathVariable long id) throws NotFoundException {
         return new ResponseEntity<>(roomService.getRoomById(id), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/room/{id}/delete")
+    public ResponseEntity deleteRoom(@PathVariable long id) {
+        roomService.deleteRoom(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

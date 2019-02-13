@@ -32,7 +32,7 @@ public class Timetable {
     @UpdateTimestamp
     private Date updateDate;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 

@@ -1,5 +1,6 @@
 package com.martinhaus.lecture_recorder.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,7 @@ public class Recording {
     private Room room;
 
     @OneToMany(mappedBy = "recording", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<RecordingDownload> downloadSet;
 
     public Recording(String title, Date datetimeCreated, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
