@@ -69,7 +69,18 @@ public class TimetableService {
 
     private String getLatestTermId() throws IOException {
         Document doc = Jsoup.connect(timetableFiitsUrl).get();
-        Element latestTerm = doc.getElementsByAttributeValue("type", "checkbox").last();
+
+        Element termTable = doc.getElementsByTag("table").first();
+        int rowCount = termTable.getElementsByTag("tr").size();
+
+        Element lastRow = termTable.getElementsByTag("tr").last();
+
+        while (lastRow.getElementsByTag("td").get(2).text().contains("doktorandské štúdiá")) {
+            rowCount--;
+            lastRow = termTable.getElementsByTag("tr").get(rowCount - 1);
+        }
+
+        Element latestTerm = lastRow.getElementsByAttributeValue("type", "checkbox").last();
         return latestTerm.val();
     }
 
@@ -118,6 +129,7 @@ public class TimetableService {
                         Lesson lesson = null;
                         if (!day.equals("") && start != 0) {
                             lesson = TimetableParser.parseLessonEntry(dataElement, start, day);
+                            start += Integer.valueOf(dataElement.attr("colspan"));
                         }
 
                         if (lesson != null) {
