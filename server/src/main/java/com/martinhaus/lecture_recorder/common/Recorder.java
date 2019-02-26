@@ -89,7 +89,15 @@ public class Recorder {
                     recording.getStartTime(),
                     recording.getEndTime(),
                     recording.getFileName());
-            emailService.sendMessage("hauskrecht@fiit.stuba.sk","test", "test");
+            if (recording.getEmail() != null) {
+                String subject = String.format("Your recording from %s - %s", recording.getRoom().getName(), recording.getStartTime());
+                String msg = String.format("Hello, your recording from %s recorder at %s finished successfully.\nIt can be found at %s.",
+                        recording.getRoom().getName(),
+                        recording.getStartTime(),
+                        recordingService.createUniqueDownloadLink(recording.getId()));
+                emailService.sendMessage(recording.getEmail(),subject, msg);
+            }
+
 
         // There was an error during recording
         } else {

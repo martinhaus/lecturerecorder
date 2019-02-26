@@ -86,6 +86,16 @@
           </div>
         </div>
 
+        <!-- email for download link -->
+        <div class="row justify-content-center"> 
+          <div class="col-2">
+            <label for="email">E-mail</label>
+          </div>
+          <div class="col-2">
+            <input class="w-100" type="email" id="email" v-model="email" v-on:keyup="repetitionPreview" />
+          </div>
+        </div>
+
         <div class="row justify-content-center"> 
         <div class="col-6">
           <b-card no-body>
@@ -165,7 +175,8 @@ export default {
        repetitionCount: 0,
        repeatEveryWeek: false,
        suffixStart: 1,
-       repetitionPreviewList: []
+       repetitionPreviewList: [],
+       email: ""
     }
   },
   components: {
@@ -202,7 +213,7 @@ export default {
           title = title + '_' + (parseInt(this.suffixStart) + i);
         }
         
-        this.postRecordingSchedule(title, startDatetime, endDatetime, this.rooms[this.selectedRoom])
+        this.postRecordingSchedule(title, startDatetime, endDatetime, this.rooms[this.selectedRoom], this.email)
       }  
     },
     approximateEndTime() {
@@ -267,12 +278,13 @@ export default {
         this.calculateDuration();
         
     },
-    postRecordingSchedule(title, startDatetime, endDatetime, room) {
+    postRecordingSchedule(title, startDatetime, endDatetime, room, email) {
       axios.post(API_URL + 'recording/schedule', {
         title: title,
         startTime: startDatetime,
         endTime: endDatetime,
-        room: room
+        room: room,
+        email: email
       }).then(() => {
         this.showSuccessAlert = true;
       }).catch(function () {

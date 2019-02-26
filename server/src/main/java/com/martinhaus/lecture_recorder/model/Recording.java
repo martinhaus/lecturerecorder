@@ -38,6 +38,9 @@ public class Recording {
     private boolean finished;
     @ColumnDefault("false")
     private boolean active;
+    @ColumnDefault("NULL")
+    private String email;
+
 
     private long pid;
 
@@ -52,7 +55,7 @@ public class Recording {
     @JsonIgnore
     private Set<RecordingDownload> downloadSet;
 
-    public Recording(String title, Date datetimeCreated, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
+    public Recording(String title, Date datetimeCreated, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room, String email) {
         this.title = title;
         this.datetimeCreated = datetimeCreated;
         this.startTime = startTime;
@@ -60,6 +63,7 @@ public class Recording {
         this.error = error;
         this.finished = finished;
         this.room = room;
+        this.email = email;
     }
 
     public Recording(String title, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
