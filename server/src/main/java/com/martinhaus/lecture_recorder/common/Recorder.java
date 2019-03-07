@@ -32,6 +32,9 @@ public class Recorder {
     @Value("${spring.recording.container}")
     private String recordingContainer;
 
+    @Value("${spring.recording.api}")
+    private String recordingAPI;
+
     private final EmailService emailService;
 
     @Autowired
@@ -89,7 +92,20 @@ public class Recorder {
                     recording.getStartTime(),
                     recording.getEndTime(),
                     recording.getFileName());
-            emailService.sendMessage("hauskrecht@fiit.stuba.sk","test", "test");
+            if (recording.getEmail() != null) {
+                String link = String.format("%s%s", recordingAPI, recordingService.createUniqueDownloadLink(recording.getId()));
+                String subject = String.format("Your recording %s from %s - %s",
+                        recording.getTitle(),
+                        recording.getRoom().getName(),
+                        recording.getStartTime());
+                String msg = String.format("Hello, your recording %s from %s recorded at %s finished successfully.%nIt can be found at %s.",
+                        recording.getTitle(),
+                        recording.getRoom().getName(),
+                        recording.getStartTime(),
+                        link);
+                emailService.sendMessage(recording.getEmail(),subject, msg);
+            }
+
 
         // There was an error during recording
         } else {
