@@ -98,7 +98,7 @@ public class Recorder {
                         recording.getTitle(),
                         recording.getRoom().getName(),
                         recording.getStartTime());
-                String msg = String.format("Hello, your recording %s from %s recorded at %s finished successfully.\nIt can be found at %s.",
+                String msg = String.format("Hello, your recording %s from %s recorded at %s finished successfully.%nIt can be found at %s.",
                         recording.getTitle(),
                         recording.getRoom().getName(),
                         recording.getStartTime(),
