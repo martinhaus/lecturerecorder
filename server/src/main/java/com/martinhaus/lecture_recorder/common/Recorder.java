@@ -93,7 +93,7 @@ public class Recorder {
                     recording.getEndTime(),
                     recording.getFileName());
             if (recording.getEmail() != null) {
-                String link = String.format("%s%s", recordingAPI, recordingService.createUniqueDownloadLink(recording.getId()));
+                String link = String.format("%s/download/%s", recordingAPI, recordingService.createUniqueDownloadLink(recording.getId()));
                 String subject = String.format("Your recording %s from %s - %s",
                         recording.getTitle(),
                         recording.getRoom().getName(),
