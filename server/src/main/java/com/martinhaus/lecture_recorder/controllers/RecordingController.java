@@ -40,7 +40,12 @@ public class RecordingController {
 
     @GetMapping(value = "/recording/{id}")
     public ResponseEntity<Recording> getRecording(@PathVariable("id") long id) {
-        return new ResponseEntity<>(recordingService.getRecording(id), HttpStatus.OK);
+        Recording recording = recordingService.getRecording(id);
+        if (recording == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(recording, HttpStatus.OK);
     }
 
     @GetMapping(path = "/recording/{id}/download")

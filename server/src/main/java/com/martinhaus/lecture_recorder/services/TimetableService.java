@@ -67,7 +67,7 @@ public class TimetableService {
         return roomOptions;
     }
 
-    private String getLatestTermId() throws IOException {
+    protected String getLatestTermId() throws IOException {
         Document doc = Jsoup.connect(timetableFiitsUrl).get();
 
         Element termTable = doc.getElementsByTag("table").first();
@@ -84,7 +84,7 @@ public class TimetableService {
         return latestTerm.val();
     }
 
-    private Document getWholeUnparsedTimetable(String timetableId) throws IOException {
+    public Document getWholeUnparsedTimetable(String timetableId) throws IOException {
         return Jsoup.connect(timetablesAisUrl)
                 .data("mistnost", timetableId)
                 .data("rozvrh", getLatestTermId())
@@ -104,7 +104,7 @@ public class TimetableService {
                 .post();
     }
 
-    private Timetable parseTimetableDoc(Document timetableDocument) {
+    public Timetable parseTimetableDoc(Document timetableDocument) {
 
         List<Lesson> lessons = new ArrayList<>();
         int begin = TimetableParser.getStartHourFromTimetableHeader(timetableDocument);
