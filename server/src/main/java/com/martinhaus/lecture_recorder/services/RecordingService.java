@@ -54,8 +54,9 @@ public class RecordingService {
         return recordingRepository.findById(id);
     }
 
-    public void saveRecording(Recording recording) {
+    public Recording saveRecording(Recording recording) {
         recordingRepository.save(recording);
+        return  recording;
     }
 
     public List<Recording> getScheduledRecordings(LocalDateTime scheduledStart) {
