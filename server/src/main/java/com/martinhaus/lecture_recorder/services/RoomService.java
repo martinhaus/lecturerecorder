@@ -26,6 +26,7 @@ public class RoomService {
     }
 
     public void saveRoom(Room room) throws IOException {
+        room.setName(room.getName().replaceAll(" ", "_"));
         roomRepository.save(room);
         if (room.getTimetableId() != null) {
             timetableService.loadLatestTimetable(room);
