@@ -5,6 +5,7 @@ import com.martinhaus.lecture_recorder.model.Recording;
 import com.martinhaus.lecture_recorder.model.RecordingDownload;
 import com.martinhaus.lecture_recorder.repositories.RecordingDownloadRepository;
 import com.martinhaus.lecture_recorder.repositories.RecordingRepository;
+import javassist.NotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +56,7 @@ public class RecordingService {
     }
 
     public Recording saveRecording(Recording recording) {
+        recording.setTitle(recording.getTitle().replaceAll(" ", "_"));
         recordingRepository.save(recording);
         return  recording;
     }
@@ -101,9 +103,13 @@ public class RecordingService {
         return recordingDownload.getUuid();
     }
 
-    public void sendRecordingFile(Long id, HttpServletRequest request, HttpServletResponse response) {
+    public void sendRecordingFile(Long id, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
         File file = getRecordingFile(id);
         Path path = Paths.get(file.getAbsolutePath());
+
+        if (!file.isFile()) {
+            throw new NotFoundException("File does not exist");
+        }
 
         try {
             MultiPartFileSender.fromPath(path)

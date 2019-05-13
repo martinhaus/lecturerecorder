@@ -2,6 +2,7 @@ package com.martinhaus.lecture_recorder.controllers;
 
 import com.martinhaus.lecture_recorder.model.Recording;
 import com.martinhaus.lecture_recorder.services.RecordingService;
+import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,13 @@ public class RecordingController {
     }
 
     @GetMapping(path = "/recording/{id}/download")
-    public void downloadRecording(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
-        recordingService.sendRecordingFile(id, request, response);
+    public ResponseEntity downloadRecording(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            recordingService.sendRecordingFile(id, request, response);
+        } catch (NotFoundException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(path= "/recording/{id}/delete")
@@ -70,9 +76,14 @@ public class RecordingController {
     }
 
     @GetMapping(path = "/download/{uuid}")
-    public void downloadRecording(@PathVariable("uuid") UUID uuid, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Object> downloadRecording(@PathVariable("uuid") UUID uuid, HttpServletRequest request, HttpServletResponse response) {
         Recording recording = recordingService.getRecordingByDownloadUUID(uuid);
-        recordingService.sendRecordingFile(recording.getId(), request, response);
+        try {
+            recordingService.sendRecordingFile(recording.getId(), request, response);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
