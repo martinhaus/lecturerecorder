@@ -60,7 +60,7 @@ public class Recording {
     public Recording(String title, Date datetimeCreated, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room, String email) {
         this.title = title;
         this.datetimeCreated = datetimeCreated;
-        this.startTime = startTime;
+        this.startTime = startTime.withNano(0).withSecond(0);
         this.endTime = endTime;
         this.error = error;
         this.finished = finished;
@@ -70,7 +70,7 @@ public class Recording {
 
     public Recording(String title, LocalDateTime startTime, LocalDateTime endTime, boolean error, boolean finished, Room room) {
         this.title = title;
-        this.startTime = startTime;
+        this.startTime = startTime.withNano(0).withSecond(0);
         this.endTime = endTime;
         this.error = error;
         this.finished = finished;
