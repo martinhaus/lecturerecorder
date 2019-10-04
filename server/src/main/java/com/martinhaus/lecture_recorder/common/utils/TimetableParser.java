@@ -30,11 +30,23 @@ public class TimetableParser {
         return begin;
     }
 
+    public static int colspanToHour(int colspan)
+    {
+        //12 colspan == 1 hour
+        return colspan / 12;
+    }
+    public static int hourToColspan(int colspan)
+    {
+        //12 colspan == 1 hour
+        return colspan * 12 ;
+    }
+
     @SuppressWarnings("ConstantConditions")
     public static Lesson parseLessonEntry(Element dataElement, int start, String day) {
         //Mark block start and finish time
-        int lessonStart = start;
-        int lessonEnd = start += Integer.valueOf(dataElement.attr("colspan"));
+        int lessonStart = colspanToHour(start);
+        //Add 2 to colspan so lesson ends at whole hour
+        int lessonEnd = colspanToHour(start + Integer.valueOf(dataElement.attr("colspan")) + 2);
         String lessonName = "";
         String teacher = "";
         //Valid lesson entry
