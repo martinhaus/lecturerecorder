@@ -109,9 +109,8 @@ public class TimetableService {
         List<Lesson> lessons = new ArrayList<>();
         int begin = TimetableParser.getStartHourFromTimetableHeader(timetableDocument);
 
-
-        //Get starting time in colspan, 12 colspan == 1 hour
-        int start = TimetableParser.hourToColspan(begin);
+        //Updates start time as a start of the new day
+        int start = begin;
 
         //Extract just first table in HTML - it has the timetable
         Element tableElement = timetableDocument.getElementsByTag("table").get(0);
@@ -143,7 +142,7 @@ public class TimetableService {
                     }
                  }
             }
-            start = TimetableParser.hourToColspan(begin);;
+            start = begin;
         }
 
         return Timetable.builder().lessonsList(lessons).build();
