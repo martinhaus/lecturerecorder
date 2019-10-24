@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.TimeZone;
@@ -34,6 +36,9 @@ public class Recorder {
 
     @Value("${spring.recording.api}")
     private String recordingAPI;
+
+    @Value("${spring.recording.timeout}")
+    private int timeout;
 
     private final EmailService emailService;
 
@@ -63,23 +68,31 @@ public class Recorder {
         df.setTimeZone(tz);
         String time = df.format(new Date(duration));
 
-        ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath, time);
-        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
-        // Start the process
-        Process p = pb.start();
+        int attemptsCount = 0;
+        Process p;
+        //Restart recording if process fails
+        do{
+            ProcessBuilder pb = new ProcessBuilder(recordingScriptPath, cameraIpAdress, audioSource, outputFilePath, time);
+            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+            // Start the process
+            p = pb.start();
 
-        // Set pid and active flag
-        recording.setPid(p.pid());
-        recording.setActive(true);
-        recording.setFileName(outputFileName);
-        // Update recording in DB
-        recordingService.saveRecording(recording);
+            // Set pid and active flag
+            recording.setPid(p.pid());
+            recording.setActive(true);
+            recording.setFileName(outputFileName);
+            // Update recording in DB
+            recordingService.saveRecording(recording);
 
-        logger.info("Started recording of {} scheduled at {}", recording.getTitle(), recording.getStartTime());
+            logger.info("Started recording of {} scheduled at {}", recording.getTitle(), recording.getStartTime());
 
-        // Wait for the process to end
-        p.waitFor();
+            // Wait for the process to end
+            p.waitFor();
+
+            attemptsCount++;
+        }
+        while(Duration.between(recording.getStartTime(), LocalDateTime.now()).toMinutes() <= timeout && p.exitValue() != 0 );
 
         // Process finished succesfully
         if (p.exitValue() == 0) {
@@ -92,6 +105,7 @@ public class Recorder {
                     recording.getStartTime(),
                     recording.getEndTime(),
                     recording.getFileName());
+
             if (recording.getEmail() != null) {
                 String link = String.format("%sdownload/%s", recordingAPI, recordingService.createUniqueDownloadLink(recording.getId()));
                 String subject = String.format("Your recording %s from %s - %s",
@@ -103,11 +117,14 @@ public class Recorder {
                         recording.getRoom().getName(),
                         recording.getStartTime(),
                         link);
+                if(attemptsCount > 1)
+                {
+                    msg = msg + " However, the recording could not start at specified time and started few minutes later.";
+                }
                 emailService.sendMessage(recording.getEmail(),subject, msg);
             }
 
-
-        // There was an error during recording
+            // There was an error during recording
         } else {
             recording.setError(true);
             recordingService.saveRecording(recording);
