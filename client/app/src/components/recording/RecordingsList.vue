@@ -1,5 +1,12 @@
 <template>
   <div class="container">
+    <div class="search-wrapper float-right row mb-2">
+      <div class="col  my-auto">
+        <p class="my-auto">Search recordings: </p>
+      </div>
+      <input class="form-control col" type="text" v-model="search" placeholder="Search title.."/>
+          
+    </div>
     <table class="table table-hover">
       <thead>
         <tr>
@@ -12,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <router-link  tag="tr" :to="{path: '/recording/' + recording.id}" class="clickable-row" v-for="recording in recordings" :key="recording.id">
+        <router-link  tag="tr" :to="{path: '/recording/' + recording.id}" class="clickable-row" v-for="recording in filteredList" :key="recording.id">
           <td>{{ recording.id }}</td>
           <td>{{ recording.title }}
             <div v-if="recording.active" class="progress">
@@ -43,7 +50,8 @@ export default {
   name: 'RecordingsList',
   data() {
     return {
-      recordings: []
+      recordings: [],
+      search: ""
     }
   },
   created: function () {
@@ -68,6 +76,13 @@ export default {
       let all = moment(end).diff(moment(start));
       let current = moment().diff(moment(start))
       return "width: " + current / all * 100 + "%;"
+    }
+  },
+  computed: {
+    filteredList() {
+      return this.recordings.filter(recording => {
+        return (recording.id.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.title.toLowerCase().includes(this.search.toLowerCase()) || recording.startTime.toLowerCase().includes(this.search.toLowerCase()) || recording.endTime.toLowerCase().includes(this.search.toLowerCase()))
+      })
     }
   }
 }
