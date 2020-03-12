@@ -1,15 +1,18 @@
 <template>
   <div class="container">
-    <div class="search-wrapper float-right row mb-2">
-      <div class="col  my-auto">
+    <div class="row mb-2">
+      <b-btn class="btn-danger m-1" v-b-modal.deleteModal>Delete all selected</b-btn>
+      <div class="col-6"></div>
+      <div class="col-2  my-auto">
         <p class="my-auto">Search recordings: </p>
       </div>
-      <input class="form-control col" type="text" v-model="search" placeholder="Search title.."/>
-          
+      <input class="form-control col-2" type="text" v-model="search" placeholder="name, id, date..."/> 
     </div>
     <table class="table table-hover">
       <thead>
         <tr>
+          <!-- <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" ></th> -->
+          <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" v-model="selectAll" ></th>
           <th scope="col">#</th>
           <th scope="col">Name</th>
           <th scope="col">Room</th>
@@ -19,9 +22,10 @@
         </tr>
       </thead>
       <tbody>
-        <router-link  tag="tr" :to="{path: '/recording/' + recording.id}" class="clickable-row" v-for="recording in filteredList" :key="recording.id">
+        <tr v-for="recording in filteredList" :key="recording.id">
+          <td><input type="checkbox"   :value="recording.id" v-model="checkedRecordings"></td>
           <td>{{ recording.id }}</td>
-          <td>{{ recording.title }}
+          <router-link tag="td" :to="{path: '/recording/' + recording.id}">{{ recording.title }}
             <div v-if="recording.active" class="progress">
               <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
               role="progressbar" aria-valuenow="10" aria-valuemin="0" 
@@ -29,14 +33,25 @@
                :style="calculateProgress(recording.startTime, recording.endTime)"></div>
             </div>
             <font-awesome-icon v-if="recording.finished" icon="check-circle" />
-          </td>
+          </router-link>
           <td>{{ recording.room.name }}</td>
           <td>{{ recording.startTime }}</td>
           <td>{{ recording.endTime }}</td>
           <td>{{ calculateDurationMinutes(recording.startTime, recording.endTime) }} minutes</td>
-        </router-link>
+        </tr>
       </tbody>
     </table>
+    <div>
+        <!-- Modal Component -->
+        <b-modal id="deleteModal" title="Delete recording?">
+            <p class="my-4">Are you sure you want to delete all selected recordings?</p>
+            <p><b>It cannot be undone.</b></p>
+            <div slot="modal-footer" class="w-100">
+                <b-btn variant="outline-primary" @click="hideModal">Cancel</b-btn>
+                <b-btn variant="danger" @click="deleteRecording">Delete</b-btn>
+            </div>
+        </b-modal>
+    </div>
   </div>
 </template>
 
@@ -51,7 +66,9 @@ export default {
   data() {
     return {
       recordings: [],
-      search: ""
+      search: "",
+      checkedRecordings: [],
+      selectAll: false,
     }
   },
   created: function () {
@@ -76,6 +93,26 @@ export default {
       let all = moment(end).diff(moment(start));
       let current = moment().diff(moment(start))
       return "width: " + current / all * 100 + "%;"
+    },
+    deleteRecording: function () {
+      this.checkedRecordings.forEach(id => {
+        axios.get(API_URL + 'recording/' + id + '/delete');
+      });
+      location.reload();
+    }
+  },
+  watch: {
+    selectAll: function() {
+      if(this.selectAll){
+        for (let rec in this.filteredList){
+          this.checkedRecordings.push(this.filteredList[rec].id)
+        }
+      } else {
+        this.checkedRecordings = [];
+      }
+    },
+    search: function() {
+      this.checkedRecordings = [];
     }
   },
   computed: {
