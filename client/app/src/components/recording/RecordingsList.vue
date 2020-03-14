@@ -13,10 +13,11 @@
         <tr>
           <!-- <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" ></th> -->
           <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" v-model="selectAll" ></th>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Room</th>
-          <th scope="col">Start</th>
+          <th scope="col"><a @click="sortById">#</a></th>
+          <!-- <a href="#" @click="sortById">tes</a> -->
+          <th scope="col"  ><a @click="sortByName">Name</a> </th>
+          <th scope="col" >Room</th>
+          <th scope="col"><a @click="sortByStart">Start</a></th>
           <th scope="col">End</th>
           <th scope="col">Duration</th>
         </tr>
@@ -69,14 +70,12 @@ export default {
       search: "",
       checkedRecordings: [],
       selectAll: false,
+      sortBy: "id",
+      operator: -1
     }
   },
   created: function () {
     this.getRecordings();
-    
-    // setInterval(function () {
-    //   this.getRecordings();
-    // }.bind(this), 5000); 
   },
   methods: {
     getRecordings: function () {
@@ -99,6 +98,18 @@ export default {
         axios.get(API_URL + 'recording/' + id + '/delete');
       });
       location.reload();
+    },
+    sortByName: function() {
+      this.operator *= -1; 
+      this.sortBy = "title";
+    },
+    sortById: function() {
+      this.operator *= -1; 
+      this.sortBy = "id";
+    },
+    sortByStart: function() {
+      this.operator *= -1; 
+      this.sortBy = "id";
     }
   },
   watch: {
@@ -119,7 +130,14 @@ export default {
     filteredList() {
       return this.recordings.filter(recording => {
         return (recording.id.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.title.toLowerCase().includes(this.search.toLowerCase()) || recording.startTime.toLowerCase().includes(this.search.toLowerCase()) || recording.endTime.toLowerCase().includes(this.search.toLowerCase()))
-      })
+      }).sort((a,b) => {
+          if (a[this.sortBy] < b[this.sortBy])
+            return -1 * this.operator;
+          if (a[this.sortBy] > b[this.sortBy])
+            return 1 * this.operator;
+          return 0;
+      });
+
     }
   }
 }
