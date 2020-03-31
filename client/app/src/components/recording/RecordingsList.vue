@@ -142,6 +142,14 @@ export default {
       return this.recordings.filter(recording => {
         return (recording.id.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.finished.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.title.toLowerCase().includes(this.search.toLowerCase()) || recording.startTime.toLowerCase().includes(this.search.toLowerCase()) || recording.room.name.toLowerCase().includes(this.search.toLowerCase()) || recording.endTime.toLowerCase().includes(this.search.toLowerCase()))
       }).sort((a,b) => {
+          if(this.sortBy == "room")
+          {
+            if (a[this.sortBy]["name"] < b[this.sortBy]["name"])
+              return -1 * this.operator;
+            if (a[this.sortBy]["name"] > b[this.sortBy]["name"])
+              return 1 * this.operator;
+            return 0;
+          }
           if (a[this.sortBy] < b[this.sortBy])
             return -1 * this.operator;
           if (a[this.sortBy] > b[this.sortBy])
