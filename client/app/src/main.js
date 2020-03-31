@@ -6,9 +6,11 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faCheckCircle)
+library.add(faArrowsAltV)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

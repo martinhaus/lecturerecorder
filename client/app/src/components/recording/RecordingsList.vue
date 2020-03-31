@@ -4,7 +4,7 @@
       <b-btn class="btn-danger m-1" v-b-modal.deleteModal>Delete all selected</b-btn>
       <div class="col-6"></div>
       <div class="col-2  my-auto">
-        <p class="my-auto">Search recordings: </p>
+        <p class="my-auto">Filter recordings: </p>
       </div>
       <input class="form-control col-2" type="text" v-model="search" placeholder="name, id, date..."/> 
     </div>
@@ -13,11 +13,12 @@
         <tr>
           <!-- <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" ></th> -->
           <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" v-model="selectAll" ></th>
-          <th scope="col"><a @click="sortById">#</a></th>
+          <th scope="col"><a @click="sortById"><font-awesome-icon icon="arrows-alt-v" /> #</a></th>
           <!-- <a href="#" @click="sortById">tes</a> -->
-          <th scope="col"  ><a @click="sortByName">Name</a> </th>
-          <th scope="col" >Room</th>
-          <th scope="col"><a @click="sortByStart">Start</a></th>
+          <th scope="col"  ><a @click="sortByName"><font-awesome-icon icon="arrows-alt-v" /> Name</a> </th>
+          <th scope="col"><a @click="sortByFinished"><font-awesome-icon icon="arrows-alt-v" /> Finished</a></th>
+          <th scope="col" ><a @click="sortByRoom"><font-awesome-icon icon="arrows-alt-v" /> Room</a></th>
+          <th scope="col"><a @click="sortByStart"><font-awesome-icon icon="arrows-alt-v" /> Start</a></th>
           <th scope="col">End</th>
           <th scope="col">Duration</th>
         </tr>
@@ -33,8 +34,10 @@
               aria-valuemax="100"
                :style="calculateProgress(recording.startTime, recording.endTime)"></div>
             </div>
-            <font-awesome-icon v-if="recording.finished" icon="check-circle" />
           </router-link>
+          <td>{{recording.finished}}
+            <!-- <font-awesome-icon v-if="recording.finished" icon="check-circle" /> -->
+          </td>
           <td>{{ recording.room.name }}</td>
           <td>{{ recording.startTime }}</td>
           <td>{{ recording.endTime }}</td>
@@ -109,7 +112,15 @@ export default {
     },
     sortByStart: function() {
       this.operator *= -1; 
-      this.sortBy = "id";
+      this.sortBy = "startTime";
+    },
+    sortByRoom: function() {
+      this.operator *= -1; 
+      this.sortBy = "room";
+    },
+    sortByFinished: function() {
+      this.operator *= -1; 
+      this.sortBy = "finished";
     }
   },
   watch: {
@@ -129,7 +140,7 @@ export default {
   computed: {
     filteredList() {
       return this.recordings.filter(recording => {
-        return (recording.id.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.title.toLowerCase().includes(this.search.toLowerCase()) || recording.startTime.toLowerCase().includes(this.search.toLowerCase()) || recording.endTime.toLowerCase().includes(this.search.toLowerCase()))
+        return (recording.id.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.finished.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.title.toLowerCase().includes(this.search.toLowerCase()) || recording.startTime.toLowerCase().includes(this.search.toLowerCase()) || recording.room.name.toLowerCase().includes(this.search.toLowerCase()) || recording.endTime.toLowerCase().includes(this.search.toLowerCase()))
       }).sort((a,b) => {
           if (a[this.sortBy] < b[this.sortBy])
             return -1 * this.operator;
