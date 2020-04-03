@@ -2,23 +2,34 @@
   <div class="container">
     <div class="row mb-2">
       <b-btn class="btn-danger m-1" v-b-modal.deleteModal>Delete all selected</b-btn>
-      <div class="col-6"></div>
+      <div class="col-5"></div>
       <div class="col-2  my-auto">
         <p class="my-auto">Filter recordings: </p>
       </div>
-      <input class="form-control col-2" type="text" v-model="search" placeholder="name, id, date..."/> 
+      <div class="col-3 align-items-center">
+        <div class="row h-100">
+          <input class="form-control col-6 " type="text" v-model="search" placeholder="name, id, date..."/> 
+          <select v-model="filter" class="form-control col-5 ml-2 h-100">
+            <option value="all" >all</option>
+            <option value="past">past</option>
+            <option value="future">future</option>
+            <option value="current">current</option>
+          </select>
+        </div>
+      </div>
+      
     </div>
     <table class="table table-hover">
       <thead>
         <tr>
           <!-- <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" ></th> -->
           <th style="padding: 0rem" scope="col"><p style="margin-bottom: 0rem;">Select all</p><input type="checkbox" v-model="selectAll" ></th>
-          <th scope="col"><a @click="sortById"><font-awesome-icon icon="arrows-alt-v" /> #</a></th>
+          <th scope="col"><a @click="sortById"># <font-awesome-icon icon="arrows-alt-v" /></a></th>
           <!-- <a href="#" @click="sortById">tes</a> -->
-          <th scope="col"  ><a @click="sortByName"><font-awesome-icon icon="arrows-alt-v" /> Name</a> </th>
-          <th scope="col"><a @click="sortByFinished"><font-awesome-icon icon="arrows-alt-v" /> Finished</a></th>
-          <th scope="col" ><a @click="sortByRoom"><font-awesome-icon icon="arrows-alt-v" /> Room</a></th>
-          <th scope="col"><a @click="sortByStart"><font-awesome-icon icon="arrows-alt-v" /> Start</a></th>
+          <th scope="col"  ><a @click="sortByName">Name <font-awesome-icon icon="arrows-alt-v" /></a> </th>
+          <th scope="col" class="px-0"><a @click="sortByFinished">Status <font-awesome-icon icon="arrows-alt-v" /></a></th>
+          <th scope="col" ><a @click="sortByRoom">Room <font-awesome-icon icon="arrows-alt-v" /></a></th>
+          <th scope="col"><a @click="sortByStart">Start <font-awesome-icon icon="arrows-alt-v" /></a></th>
           <th scope="col">End</th>
           <th scope="col">Duration</th>
         </tr>
@@ -35,8 +46,10 @@
                :style="calculateProgress(recording.startTime, recording.endTime)"></div>
             </div>
           </router-link>
-          <td>{{recording.finished}}
-            <!-- <font-awesome-icon v-if="recording.finished" icon="check-circle" /> -->
+          <td>
+            <!-- {{recording.finished}} -->
+            <div><font-awesome-icon v-if="recording.finished" icon="check-circle" /></div>
+            <p v-if="!recording.finished">-</p>
           </td>
           <td>{{ recording.room.name }}</td>
           <td>{{ recording.startTime }}</td>
@@ -71,6 +84,7 @@ export default {
     return {
       recordings: [],
       search: "",
+      filter: "all",
       checkedRecordings: [],
       selectAll: false,
       sortBy: "id",
@@ -139,7 +153,15 @@ export default {
   },
   computed: {
     filteredList() {
+      let date = new Date();
       return this.recordings.filter(recording => {
+        let recordingDate = new Date(recording.startTime);
+        if(this.filter == "all") return true;
+        if(this.filter == "past" && recordingDate < date) return true;
+        if(this.filter == "future" && recordingDate > date) return true;
+        if(this.filter == "current" && recordingDate > date.setDate(date.getDate() - 7) && recordingDate < date.setDate(date.getDate() + 7)) return true;
+        return false;
+      }).filter(recording => {
         return (recording.id.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.finished.toString().toLowerCase().includes(this.search.toLowerCase()) || recording.title.toLowerCase().includes(this.search.toLowerCase()) || recording.startTime.toLowerCase().includes(this.search.toLowerCase()) || recording.room.name.toLowerCase().includes(this.search.toLowerCase()) || recording.endTime.toLowerCase().includes(this.search.toLowerCase()))
       }).sort((a,b) => {
           if(this.sortBy == "room")
